@@ -59,6 +59,15 @@
     [(empty? b_lst) '()]
     [else (cons (cons (car a_lst) (cons (car b_lst) '())) (zip (cdr a_lst) (cdr b_lst)))]))
 
+;reduce
+(define (reduce f lst)  
+  (cond
+    [(empty? lst) '()]
+    [(empty? (cdr lst)) (car lst)]
+    [else (f (car lst) (reduce f (cdr lst)))]))
+
+  
+
 ;;pruebas para la función pow
 ;;casos base
 (test 1 (pow 3 0))
@@ -94,3 +103,10 @@
 (test '((8 3) (9 2)) (zip '(8 9) '(3 2 1 4)))
 (test '((8 3) (9 4)) (zip '(8 9 1 2) '(3 4)))
 
+;;prubas para reduce
+;;caso simple
+(test 55 (reduce + '(1 2 3 4 5 6 7 8 9 10)))
+;;casos base
+(test '() (reduce + '()))
+;;casos generales
+(test 0 (reduce - '(2 2 3 3 4 4)))
