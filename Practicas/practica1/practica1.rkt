@@ -81,6 +81,12 @@
      [(empty? lst1) lst2]
      [else (cons (car lst1) (mconcat (cdr lst1) lst2))]))
 
+;;funcion que aplica una funcion a cada elemento de una lista
+(define (mmap f lst)
+  (cond
+    [(empty? lst) '()]
+    [else (cons (f (car lst)) (mmap f (cdr lst)))]))
+
 ;;----------------------------------------------------------------------------------------------------------
 ;;pruebas para la función pow
 ;;casos base
@@ -135,3 +141,8 @@
 ;;caso general
 (test '(1 2 3 4 5 6) (mconcat '(1 2 3) '(4 5 6)))
 (test '(2 3 1 4 8 2 1) (mconcat '(2 3 1) '(4 8 2 1)))
+
+;;pruebas para mmap
+(test '(2 3 4 5) (mmap add1 '(1 2 3 4)))
+(test '(1 4 7) (mmap car '((1 2 3) (4 5 6) (7 8 9))))
+(test '((2 3) (5 6) (8 9))(mmap cdr '((1 2 3) (4 5 6) (7 8 9))))
