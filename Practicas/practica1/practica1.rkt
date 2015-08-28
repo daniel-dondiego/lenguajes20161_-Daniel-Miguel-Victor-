@@ -47,6 +47,18 @@
     [(esprimo n (- n 1)) (cons n (primes(- n 1)))]
     [else (primes (- n 1))]))
 
+;;función zip que toma dos listas 
+;;y devuelve pares de las i-ésimas entradas
+;;verifica los casos en que alguna lista es vacía, donde devuelve la lista vacía y se detiene
+;;en otro caso toma el primer elemento de la primera lista
+;;y lo concatena con el primer elemento concatenado con la lista vacía, para que sea una lísta
+;;y ese par se lo concatena a la llamada recursiva de la función con el resto de las listas
+(define (zip a_lst b_lst)
+  (cond 
+    [(empty? a_lst) '()]
+    [(empty? b_lst) '()]
+    [else (cons (cons (car a_lst) (cons (car b_lst) '())) (zip (cdr a_lst) (cdr b_lst)))]))
+
 ;;pruebas para la función pow
 ;;casos base
 (test 1 (pow 3 0))
@@ -71,4 +83,14 @@
 (test '(7 5 3 2) (primes 10))
 (test '(11 7 5 3 2) (primes 11))
 (test '(19 17 13 11 7 5 3 2) (primes 20))
+
+;;pruebas para la función zip
+;;caso simple
+(test '((1 3) (2 4)) (zip '(1 2) '(3 4)))
+;;casos base
+(test '() (zip '(1 2 3) '()))
+(test '() (zip '() '(4 5 6)))
+;;casos generales
+(test '((8 3) (9 2)) (zip '(8 9) '(3 2 1 4)))
+(test '((8 3) (9 4)) (zip '(8 9 1 2) '(3 4)))
 
