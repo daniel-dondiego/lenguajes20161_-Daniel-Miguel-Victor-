@@ -59,29 +59,6 @@
     [(empty? b_lst) '()]
     [else (cons (cons (car a_lst) (cons (car b_lst) '())) (zip (cdr a_lst) (cdr b_lst)))]))
 
-;reduce, recibe dos listas
-;Recibe una función binaria y una lista, evalua todos los elementos de la lista
-;con la función
-;Si la lista es vacía la regresa, si la lista contiene un solo elemento
-;lo regresa, si no evalua la función con el primer elemento de la lista con la
-;llamada recursiva sobre el resto de la lista.
-(define (reduce f lst)  
-  (cond
-    [(empty? lst) '()]
-    [(empty? (cdr lst)) (car lst)]
-    [else (f (car lst) (reduce f (cdr lst)))]))
-
-;;mconcat
-;;Concatena dos listas
-;;Verifica si la primera lista es vacía, si lo es regresa la segunda,
-;; si no toma la cabeza de la lista y la concatena con la llamada recursiva del
-;; resto de la lista usando la función cons.
- (define (mconcat lst1 lst2)
-   (cond
-     [(empty? lst1) lst2]
-     [else (cons (car lst1) (mconcat (cdr lst1) lst2))]))
-
-;;----------------------------------------------------------------------------------------------------------
 ;;pruebas para la función pow
 ;;casos base
 (test 1 (pow 3 0))
@@ -117,21 +94,3 @@
 (test '((8 3) (9 2)) (zip '(8 9) '(3 2 1 4)))
 (test '((8 3) (9 4)) (zip '(8 9 1 2) '(3 4)))
 
-;;prubas para reduce
-;;caso simple
-(test 55 (reduce + '(1 2 3 4 5 6 7 8 9 10)))
-;;casos base
-(test '() (reduce + '()))
-(test 1 (reduce + '(1)))
-;;casos generales
-(test 0 (reduce - '(2 2 3 3 4 4)))
-(test '((1 (4 7)) (2 (5 8)) (3 (6 9))) (reduce zip '((1 2 3) (4 5 6) (7 8 9))))
-
-;;pruebas para mconcat
-;;caso base
-(test '() (mconcat '() '()))
-(test '(1 2 3) (mconcat '(1 2 3) '()))
-(test '(1 2 3) (mconcat '() '(1 2 3)))
-;;caso general
-(test '(1 2 3 4 5 6) (mconcat '(1 2 3) '(4 5 6)))
-(test '(2 3 1 4 8 2 1) (mconcat '(2 3 1) '(4 8 2 1)))
