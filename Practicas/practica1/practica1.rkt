@@ -108,6 +108,14 @@
     [(p (car lst)) #t]
     [else (any? p (cdr lst))]))
 
+;;every?
+;;Regresa #t si todos los elementos de la lista cumplen el predicado
+(define (every? p  lst)
+  (cond
+    [(empty? lst) #t]
+    [(not (p (car lst))) #f]
+    [else (every? p (cdr lst))]))
+
 ;;----------------------------------------------------------------------------------------------------------
 ;;pruebas para la función pow
 ;;casos base
@@ -177,7 +185,7 @@
 (test '(2 4 6) (mfilter (lambda (n) (= (modulo n 2) 0)) '(1 2 3 4 5 6)))
 (test '(3 6 9) (mfilter (lambda (n) (= (modulo n 3) 0)) '(1 2 3 4 5 6 7 8 9)))
 
-;;pruebas pra any?
+;;pruebas para any?
 ;; casos base
 (test #f (any? number? '()))
 ;;casos generales
@@ -185,3 +193,12 @@
 (test #f (any? number? '(a b c d e)))
 (test #f (any? symbol? '(1 2 3 4)))
 (test #t (any? symbol? '(1 2 c 4)))
+
+;;pruebas para every?
+;;casos base
+(test #t (every? number? '()))
+;;casos generales
+(test #t (every? number? '(1 2 3)))
+(test #f (every? number? '(1 2 3 a)))
+(test #f (every? number? '(a a a a a a)))
+(test #t (every? symbol? '(a a a a a a a)))
