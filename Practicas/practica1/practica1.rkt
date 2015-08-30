@@ -98,6 +98,15 @@
     [(p (car lst)) (mconcat (cons (car lst) '())(mfilter p (cdr lst)))]
     [else (mfilter p (cdr lst) )]))
 
+;;any?
+;; Regresa #t si algún elemento cumple con el predicado, #f en caso contrario,
+;; verifica si la lista es vacia, si lo es regresa #f por que nada cumple el predicado.
+;; Si encuentra alguno que cumpla regresa #t, en otro caso se recursa sobre el resto de la lista.
+(define (any? p lst)
+  (cond
+    [(empty? lst) #f]
+    [(p (car lst)) #t]
+    [else (any? p (cdr lst))]))
 
 ;;----------------------------------------------------------------------------------------------------------
 ;;pruebas para la función pow
@@ -167,3 +176,12 @@
 (test '((1 4 2) (2 4)) (mfilter (lambda (l) (not (empty? l))) '((1 4 2) () (2 4) ())))
 (test '(2 4 6) (mfilter (lambda (n) (= (modulo n 2) 0)) '(1 2 3 4 5 6)))
 (test '(3 6 9) (mfilter (lambda (n) (= (modulo n 3) 0)) '(1 2 3 4 5 6 7 8 9)))
+
+;;pruebas pra any?
+;; casos base
+(test #f (any? number? '()))
+;;casos generales
+(test #t (any? number? '(a b c d 1)))
+(test #f (any? number? '(a b c d e)))
+(test #f (any? symbol? '(1 2 3 4)))
+(test #t (any? symbol? '(1 2 c 4)))
