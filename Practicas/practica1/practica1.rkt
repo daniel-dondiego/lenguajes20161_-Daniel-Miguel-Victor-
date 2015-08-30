@@ -87,6 +87,18 @@
     [(empty? lst) '()]
     [else (cons (f (car lst)) (mmap f (cdr lst)))]))
 
+;;mfilter
+;; Regresa una lista solo con los elementos que son verdad bajo un predicado
+;; Si la lista es vacía se regresa la misma, si la cabeza de la lista devuelve true bajo
+;; el predicado se regresa la cabeza concatenada con la llamda recursiva, en otro caso
+;; no se toma en cuenta la cabeza y se recursa sobre el resto de la lista.
+(define (mfilter p lst)
+  (cond
+    [(empty? lst) '()]
+    [(p (car lst)) (mconcat (cons (car lst) '())(mfilter p (cdr lst)))]
+    [else (mfilter p (cdr lst) )]))
+
+
 ;;----------------------------------------------------------------------------------------------------------
 ;;pruebas para la función pow
 ;;casos base
@@ -146,3 +158,12 @@
 (test '(2 3 4 5) (mmap add1 '(1 2 3 4)))
 (test '(1 4 7) (mmap car '((1 2 3) (4 5 6) (7 8 9))))
 (test '((2 3) (5 6) (8 9))(mmap cdr '((1 2 3) (4 5 6) (7 8 9))))
+
+;;pruebas para mfilter
+;;caso base
+(test '() (mfilter (lambda (x) (not (zero? x)) )'()))
+;;casos generales
+(test '(2 1 4) (mfilter (lambda (x) (not (zero? x))) '(2 0 1 4 0)))
+(test '((1 4 2) (2 4)) (mfilter (lambda (l) (not (empty? l))) '((1 4 2) () (2 4) ())))
+(test '(2 4 6) (mfilter (lambda (n) (= (modulo n 2) 0)) '(1 2 3 4 5 6)))
+(test '(3 6 9) (mfilter (lambda (n) (= (modulo n 3) 0)) '(1 2 3 4 5 6 7 8 9)))
