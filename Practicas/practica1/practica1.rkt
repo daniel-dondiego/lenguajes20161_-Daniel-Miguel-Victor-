@@ -177,6 +177,8 @@
 (test '(2 3 4 5) (mmap add1 '(1 2 3 4)))
 (test '(1 4 7) (mmap car '((1 2 3) (4 5 6) (7 8 9))))
 (test '((2 3) (5 6) (8 9))(mmap cdr '((1 2 3) (4 5 6) (7 8 9))))
+(test '(1 2) (mmap average '((1 1 1 1 1) (1 2 3 1 3))))
+(test '(0 1 2 3) (mmap sub1 '(1 2 3 4)))
 
 ;;pruebas para mfilter
 ;;caso base
