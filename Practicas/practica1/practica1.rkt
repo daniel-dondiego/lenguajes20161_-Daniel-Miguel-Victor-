@@ -110,6 +110,8 @@
 
 ;;every?
 ;;Regresa #t si todos los elementos de la lista cumplen el predicado
+;; si la lista es vacía regresa #t, si no cumple el elemento actual de la lista regresa #f
+;; si no sigues buscando alguno que no cumpla, si no lo encuentra y llega a la lista vacía regresa #t
 (define (every? p  lst)
   (cond
     [(empty? lst) #t]
