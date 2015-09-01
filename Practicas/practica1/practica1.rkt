@@ -118,6 +118,23 @@
     [(not (p (car lst))) #f]
     [else (every? p (cdr lst))]))
 
+;;función auxiliar para concatenar cada elemento de la lista
+;;con cada elemento y con las sublistas posibles
+(define (subconcat elem lst)
+  (cond
+    [(empty? lst)  '()]
+    [else (cons (cons elem (car lst)) (cons (car lst) (subconcat elem (cdr lst))))]))
+
+;;mpowerset
+;;(da la lista al revés)
+;;si la lista es vacía devuelve la lista que contiene a la lista vacía
+;; si no llama a la función auxiliar pasando el primer elemento de la lista en cada llamada recursiva y
+;; pasando como lista para concatenar con el elemento a la llamada recursiva de la función con el resto
+(define (mpowerset lst)
+  (cond
+    [(empty? lst) '(())]
+    [else (subconcat (car lst) (mpowerset (cdr lst)))]))
+
 ;;----------------------------------------------------------------------------------------------------------
 ;;pruebas para la función pow
 ;;casos base
@@ -206,3 +223,10 @@
 (test #f (every? number? '(1 2 3 a)))
 (test #f (every? number? '(a a a a a a)))
 (test #t (every? symbol? '(a a a a a a a)))
+
+;;pruebas para mpowerset
+(test '(()) (mpowerset '()))
+(test (reverse '(() (1))) (mpowerset '(1)))
+(test (reverse '(() (1) (2) (1 2))) (mpowerset '(1 2)))
+;;(test (reverse '(() (1) (2) (3) (1 2) (1 3) (2 3) (1 2 3))) (mpowerset '(1 2 3)))
+(mpowerset '(1 2 3))
