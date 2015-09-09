@@ -19,8 +19,7 @@
   (NodeN (node number?) (children (listof NTree?))))
 
 (test (TLEmpty) (TLEmpty))
-(test (NodeN 1 (list (TLEmpty) (TLEmpty) (TLEmpty)))  (NodeN 1 (list (TLEmpty) (TLEmpty) (TLEmpty))) )
-
+(test (NodeN 1 (list (TLEmpty) (TLEmpty) (TLEmpty)))  (NodeN 1 (list (TLEmpty) (TLEmpty) (TLEmpty))))
 
 (define-type Position
   [2D-Point (x number?) (y number?)])
