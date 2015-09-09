@@ -3,15 +3,17 @@
 (define-type Array
   [MArray (leng number?) (elements list?)])
 
-(test (Array? (MArray 2 '(1, 4))) #t)
+(test (Array? (MArray 2 '("a" "b"))) #t)
 (test (Array? (MArray 0 '())) #t)
 
 
 (define-type MList
   [MEmpty]
-  [MCons (value number?) (next MList?)])
+  [MCons (value generic?) (next MList?)])
 
 (test (MEmpty) (MEmpty))
+
+
 
 
 (define-type NTree
@@ -28,3 +30,7 @@
   [Circle (center Position?) (radio number?)]
   [Square (vertex Position?) (length number?)]
   [Rectangle (vertex Position?) (heigth number?) (length number?)])
+
+
+
+  
