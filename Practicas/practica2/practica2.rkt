@@ -9,7 +9,9 @@
 
 (define-type MList
   [MEmpty]
-  [MCons (value number?) (next MList?)])
+  [MCons (value generic?) (next MList?)])
+
+(define (generic? g) #t)
 
 (test (MEmpty) (MEmpty))
 
@@ -28,3 +30,12 @@
   [Circle (center Position?) (radio number?)]
   [Square (vertex Position?) (length number?)]
   [Rectangle (vertex Position?) (heigth number?) (length number?)])
+
+
+(define (MArray2MList array)
+  (cond
+    [(empty? (MArray-elements array)) (MEmpty)]
+    [else (MCons (car (MArray-elements array)) (MArray2MList (MArray (MArray-leng array) (cdr  (MArray-elements array)) )))]))
+
+(test (MArray2MList (MArray 0 '())) (MEmpty))
+(test (MArray2MList (MArray 5 '("a" "b"))) (MCons "a" (MCons "b" (MEmpty))))
