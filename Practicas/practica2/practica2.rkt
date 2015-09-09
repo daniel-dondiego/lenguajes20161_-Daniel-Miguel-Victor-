@@ -24,3 +24,8 @@
 
 (define-type Position
   [2D-Point (x number?) (y number?)])
+
+(define-type Figure
+  [Circle (center Position?) (radio number?)]
+  [Square (vertex Position?) (length number?)]
+  [Rectangle (vertex Position?) (heigth number?) (length number?)])
