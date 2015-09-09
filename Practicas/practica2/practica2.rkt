@@ -10,3 +10,13 @@
 (define-type MList
   [MEmpty]
   [MCons (value number?) (next MList?)])
+
+(test (MEmpty) (MEmpty))
+
+
+(define-type NTree
+  [TLEmpty]
+  (NodeN (node number?) (children (listof NTree?))))
+
+(test (TLEmpty) (TLEmpty))
+(NTree? (NodeN 1 (list (TLEmpty) (TLEmpty) (TLEmpty))))
