@@ -116,9 +116,32 @@
       (MCons 1 (MCons 7 (MCons 10 (MCons 6 (MEmpty))))))
 (test (MCons 3 (MCons 2 (MEmpty))) (MCons 3 (MCons 2 (MEmpty))))
 
+;Pruebas del tipo NTree
 (test (TLEmpty) (TLEmpty))
+(test (NodeN 1 (list (TLEmpty) (TLEmpty) (TLEmpty)))  
+      (NodeN 1 (list (TLEmpty) (TLEmpty) (TLEmpty))))
+(test (NodeN 1 (list (NodeN 2 (list (TLEmpty)))
+                     (NodeN 3 (list (TLEmpty) (TLEmpty)))))
+      (NodeN 1 (list (NodeN 2 (list (TLEmpty)))
+                     (NodeN 3 (list (TLEmpty) (TLEmpty))))))
+(test (NodeN 1 (list (NodeN 2 (list (TLEmpty)))
+                     (NodeN 3 (list (TLEmpty)))
+                     (NodeN 4 (list (TLEmpty) (TLEmpty) (TLEmpty)))))
+      (NodeN 1 (list (NodeN 2 (list (TLEmpty)))
+                     (NodeN 3 (list (TLEmpty)))
+                     (NodeN 4 (list (TLEmpty) (TLEmpty) (TLEmpty))))))
+(test (NodeN 1 (list (NodeN 2 (list (TLEmpty)))
+                     (NodeN 3 (list (TLEmpty)))
+                     (NodeN 4 (list (TLEmpty)))
+                     (NodeN 5 (list (TLEmpty) (TLEmpty) (TLEmpty) (TLEmpty)))))
+      (NodeN 1 (list (NodeN 2 (list (TLEmpty)))
+                     (NodeN 3 (list (TLEmpty)))
+                     (NodeN 4 (list (TLEmpty)))
+                     (NodeN 5 (list (TLEmpty) (TLEmpty) (TLEmpty) (TLEmpty))))))
 
-(test (NodeN 1 (list (TLEmpty) (TLEmpty) (TLEmpty)))  (NodeN 1 (list (TLEmpty) (TLEmpty) (TLEmpty))))
+;Pruebas para el tipo position
+(test (2D-Point 0 0) (2D-Point 0 0))
+
 
 ;Pruebas Sección II
 
