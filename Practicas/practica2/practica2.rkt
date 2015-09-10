@@ -31,11 +31,26 @@
   [Square (vertex Position?) (length number?)]
   [Rectangle (vertex Position?) (heigth number?) (length number?)])
 
-
+;Regresa una lista de tipo MList dada un MArray con todos los elementos de este último
 (define (MArray2MList array)
   (cond
     [(empty? (MArray-elements array)) (MEmpty)]
-    [else (MCons (car (MArray-elements array)) (MArray2MList (MArray (MArray-leng array) (cdr  (MArray-elements array)) )))]))
+    [else (MCons (car (MArray-elements array)) (MArray2MList (MArray (- (MArray-leng array) 1) (cdr (MArray-elements array)))))]))
 
 (test (MArray2MList (MArray 0 '())) (MEmpty))
 (test (MArray2MList (MArray 5 '("a" "b"))) (MCons "a" (MCons "b" (MEmpty))))
+
+;Imprime las MList en un formato legible.
+(define (printML mlist)  
+  (cond
+    [(MEmpty? mlist) "[]"]  
+    [else (string-append "[" (string-append (separate mlist) "]"))]))
+
+;auxiliar que pone una "," entre cada elemento.
+(define (separate mlist)
+  (define (comas mlist)
+    (cond
+      [(MEmpty? mlist) ""]
+      [(MList? (MCons-value mlist))  (string-append (printML (MCons-value mlist)) (string-append "," (comas (MCons-next mlist))))]
+      [else(string-append (~a (MCons-value mlist)) (string-append "," (comas (MCons-next mlist) )))]))
+  (substring (comas mlist) 0 (-(string-length (comas mlist)) 1)))
