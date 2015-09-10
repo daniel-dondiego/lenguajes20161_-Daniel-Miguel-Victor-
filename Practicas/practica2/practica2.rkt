@@ -30,12 +30,11 @@
   [Square (vertex Position?) (length number?)]
   [Rectangle (vertex Position?) (heigth number?) (length number?)])
 
-<<<<<<< HEAD
 ;Regresa una lista de tipo MList dada un MArray con todos los elementos de este último
 (define (MArray2MList array)
   (cond
     [(empty? (MArray-elements array)) (MEmpty)]
-    [else (MCons (car (MArray-elements array)) (MArray2MList (MArray (- (MArray-leng array) 1) (cdr (MArray-elements array)))))]))
+    [else (MCons (car (MArray-elements array)) (MArray2MList (MArray (- (MArray-length array) 1) (cdr (MArray-elements array)))))]))
 
 (define (setvalueA array posicion v)
   (cond
@@ -67,3 +66,9 @@
       [(MList? (MCons-value mlist))  (string-append (printML (MCons-value mlist)) (string-append "," (comas (MCons-next mlist))))]
       [else(string-append (~a (MCons-value mlist)) (string-append "," (comas (MCons-next mlist) )))]))
   (substring (comas mlist) 0 (-(string-length (comas mlist)) 1)))
+
+(test (printML (MEmpty)) "[]")
+(test (printML (MCons 4 (MEmpty))) "[4]")
+(test (printML (MCons 7 (MCons 4 (MEmpty)))) "[7,4]")
+(test (printML (MCons (MCons 4 (MCons 1 (MEmpty))) (MCons 20 (MEmpty)))) "[[4,1],20]")
+(test (printML (MCons 7 (MCons 4 (MCons 1 (MEmpty)))))  "[7,4,1]")
