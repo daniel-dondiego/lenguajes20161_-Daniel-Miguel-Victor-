@@ -107,15 +107,26 @@
 
 
 ;-------------------------------------------------------------------------------------------------------------
+;Prubas Sección I
 
 ;Pruebas del tipo Array.
 (test (Array? (MArray 4 '("a" "b"))) #t)
 (test (Array? (MArray 0 '())) #t)
 
+;Pruebas del tipo MList
 (test (MEmpty) (MEmpty))
+(test (MCons 1 (MEmpty)) (MCons 1 (MEmpty)))
+(test (MCons 4 (MCons 3 (MCons 5 (MEmpty)))) 
+      (MCons 4 (MCons 3 (MCons 5 (MEmpty)))))
+(test (MCons 1 (MCons 7 (MCons 10 (MCons 6 (MEmpty))))) 
+      (MCons 1 (MCons 7 (MCons 10 (MCons 6 (MEmpty))))))
+(test (MCons 3 (MCons 2 (MEmpty))) (MCons 3 (MCons 2 (MEmpty))))
 
 (test (TLEmpty) (TLEmpty))
+
 (test (NodeN 1 (list (TLEmpty) (TLEmpty) (TLEmpty)))  (NodeN 1 (list (TLEmpty) (TLEmpty) (TLEmpty))))
+
+;Pruebas Sección II
 
 ;Pruebas MArray2MList
 (test (MArray2MList (MArray 0 '())) (MEmpty))
