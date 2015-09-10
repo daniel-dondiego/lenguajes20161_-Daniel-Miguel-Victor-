@@ -84,6 +84,13 @@
   [(MEmpty? lst1) lst2]
   [(MEmpty? lst2) lst1]
   [else (MCons (MCons-value lst1)(concatML (MCons-next lst1) lst2))]))
+
+;Dada una  MList nos regresa su longitud
+(define (lengthML mlist)
+  (cond
+  [(MEmpty? mlist) 0]
+  [else (+(lengthML (MCons-next mlist)) 1)]))
+
 ;-------------------------------------------------------------------------------------------------------------
 
 ;Pruebas del tipo Array.
@@ -117,3 +124,9 @@
 (test (concatML (MCons 3 (MEmpty)) (MEmpty)) (MCons 3 (MEmpty)))
 (test (concatML (MCons 7 (MCons 4 (MEmpty))) (MCons 1 (MCons 10 (MEmpty)))) (MCons 7 (MCons 4 (MCons 1 (MCons 10 (MEmpty))))))
 
+;Pruebas lengthML
+(test (lengthML (MEmpty)) 0)
+(test (lengthML (MCons 7 (MCons 4 (MEmpty)))) 2)
+(test (lengthML (MCons 7 (MCons 4 (MCons 1 (MCons 10 (MEmpty)))))) 4)
+(test (lengthML (MCons 3 (MEmpty))) 1)
+(test (lengthML (MCons 7 (MCons 4 (MCons 1 (MEmpty))))) 3)
