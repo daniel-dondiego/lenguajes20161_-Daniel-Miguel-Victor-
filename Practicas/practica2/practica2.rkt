@@ -46,7 +46,7 @@
 ;regresa un error.
 (define (setvalueA array posicion v)
   (cond
-    [(=> posicion (MArray-length array)) (error 'setvalueA "Out of bounds")]
+    [(>= posicion (MArray-length array)) (error 'setvalueA "Out of bounds")]
     [else (MArray (MArray-length array) (auxSVA (MArray-elements array) posicion v))]))
 
 ;Funcion auxiliar de setvalueA que regresa una lista a 
