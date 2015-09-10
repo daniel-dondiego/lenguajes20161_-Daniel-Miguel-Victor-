@@ -72,3 +72,16 @@
 (test (printML (MCons 7 (MCons 4 (MEmpty)))) "[7,4]")
 (test (printML (MCons (MCons 4 (MCons 1 (MEmpty))) (MCons 20 (MEmpty)))) "[[4,1],20]")
 (test (printML (MCons 7 (MCons 4 (MCons 1 (MEmpty)))))  "[7,4,1]")
+
+;Dadas dos MList, las concatena
+(define (concatML lst1 lst2)
+  (cond
+  [(MEmpty? lst1) lst2]
+  [(MEmpty? lst2) lst1]
+  [else (MCons (MCons-value lst1)(concatML (MCons-next lst1) lst2))]))
+
+(test (concatML (MCons 7 (MCons 4 (MEmpty))) (MCons 1 (MEmpty))) (MCons 7 (MCons 4 (MCons 1 (MEmpty)))))
+(test (concatML (MEmpty) (MEmpty)) (MEmpty))
+(test (concatML (MCons 7 (MEmpty)) (MEmpty)) (MCons 7 (MEmpty)))
+(test (concatML (MCons 3 (MEmpty)) (MEmpty)) (MCons 3 (MEmpty)))
+(test (concatML (MCons 7 (MCons 4 (MEmpty))) (MCons 1 (MCons 10 (MEmpty)))) (MCons 7 (MCons 4 (MCons 1 (MCons 10 (MEmpty))))))
