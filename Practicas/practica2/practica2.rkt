@@ -1,7 +1,7 @@
 #lang plai
 
 (define-type Array
-  [MArray (leng number?) (elements list?)])
+  [MArray (length number?) (elements list?)])
 
 (test (Array? (MArray 2 '("a" "b"))) #t)
 (test (Array? (MArray 0 '())) #t)
@@ -14,7 +14,6 @@
 (define (generic? g) #t)
 
 (test (MEmpty) (MEmpty))
-
 
 (define-type NTree
   [TLEmpty]
@@ -32,10 +31,16 @@
   [Rectangle (vertex Position?) (heigth number?) (length number?)])
 
 
+(define (setvalueA array posicion v)
+  (cond
+    [(> posicion (MArray-length array)) (error 'setvalueA "Out of bounds")]
+    [(= posicion 0) (cons v (cdr (MArray-elements array)))]
+    [else (MArray (MArray-length array) (cons (car (MArray-elements array)) (setvalueA (cdr (MArray-elements array)) (- posicion 1) v)))]))
+
 (define (MArray2MList array)
   (cond
     [(empty? (MArray-elements array)) (MEmpty)]
-    [else (MCons (car (MArray-elements array)) (MArray2MList (MArray (MArray-leng array) (cdr  (MArray-elements array)) )))]))
+    [else (MCons (car (MArray-elements array)) (MArray2MList (MArray (MArray-length array) (cdr  (MArray-elements array)) )))]))
 
 (test (MArray2MList (MArray 0 '())) (MEmpty))
 (test (MArray2MList (MArray 5 '("a" "b"))) (MCons "a" (MCons "b" (MEmpty))))
