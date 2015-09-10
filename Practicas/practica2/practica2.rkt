@@ -61,8 +61,10 @@
 (define (MArray2MList array)
   (cond
     [(empty? (MArray-elements array)) (MEmpty)]
-    [else (MCons (car (MArray-elements array)) (MArray2MList (MArray (MArray-length array) 
-                                                                     (cdr  (MArray-elements array)) )))]))
+    [else (MCons (car (MArray-elements array)) 
+                 (MArray2MList (MArray (MArray-length array) 
+                                       (cdr  (MArray-elements array)) )))]))
+
 ;Imprime las MList en un formato legible.
 (define (printML mlist)  
   (cond
@@ -107,23 +109,31 @@
 
 
 ;-------------------------------------------------------------------------------------------------------------
+
 ;Prubas Sección I
 
 ;Pruebas del tipo Array.
-(test (Array? (MArray 4 '("a" "b"))) #t)
 (test (Array? (MArray 0 '())) #t)
+(test (Array? (MArray 1 '(8))) #t)
+(test (Array? (MArray 4 '(1 2 3 4))) #t)
+(test (Array? (MArray 4 '(1 2 3))) #t)
+(test (Array? (MArray 7 '(1))) #t)
 
 ;Pruebas del tipo MList
-(test (MEmpty) (MEmpty))
-(test (MCons 1 (MEmpty)) (MCons 1 (MEmpty)))
+(test (MEmpty) 
+      (MEmpty))
+(test (MCons 1 (MEmpty)) 
+      (MCons 1 (MEmpty)))
 (test (MCons 4 (MCons 3 (MCons 5 (MEmpty)))) 
       (MCons 4 (MCons 3 (MCons 5 (MEmpty)))))
 (test (MCons 1 (MCons 7 (MCons 10 (MCons 6 (MEmpty))))) 
       (MCons 1 (MCons 7 (MCons 10 (MCons 6 (MEmpty))))))
-(test (MCons 3 (MCons 2 (MEmpty))) (MCons 3 (MCons 2 (MEmpty))))
+(test (MCons 3 (MCons 2 (MEmpty))) 
+      (MCons 3 (MCons 2 (MEmpty))))
 
 ;Pruebas del tipo NTree
-(test (TLEmpty) (TLEmpty))
+(test (TLEmpty) 
+      (TLEmpty))
 (test (NodeN 1 (list (TLEmpty) (TLEmpty) (TLEmpty)))  
       (NodeN 1 (list (TLEmpty) (TLEmpty) (TLEmpty))))
 (test (NodeN 1 (list (NodeN 2 (list (TLEmpty)))
@@ -146,20 +156,57 @@
                      (NodeN 5 (list (TLEmpty) (TLEmpty) (TLEmpty) (TLEmpty))))))
 
 ;Pruebas para el tipo position
-(test (2D-Point 0 0) (2D-Point 0 0))
-(test (2D-Point 1 (sqrt 2)) (2D-Point 1 (sqrt 2)))
-(test (2D-Point 5 3.14159) (2D-Point 5 3.14159))
-(test (2D-Point 0 5) (2D-Point 0 5))
-(test (2D-Point 3 0) (2D-Point 3 0))
+(test (2D-Point 0 0) 
+      (2D-Point 0 0))
+(test (2D-Point 1 (sqrt 2)) 
+      (2D-Point 1 (sqrt 2)))
+(test (2D-Point 5 3.14159) 
+      (2D-Point 5 3.14159))
+(test (2D-Point 0 5) 
+      (2D-Point 0 5))
+(test (2D-Point 3 0) 
+      (2D-Point 3 0))
 
 ;Pruebas para el tipo Figure
+(test (Circle (2D-Point 2 2) 2) 
+      (Circle (2D-Point 2 2) 2))
+(test (Circle (2D-Point 3 4) 4)
+      (Circle (2D-Point 3 4) 4))
+(test (Square (2D-Point 0 3) 3)
+      (Square (2D-Point 0 3) 3))
+(test (Square (2D-Point 5 6) 6)
+      (Square (2D-Point 5 6) 6))
+(test (Rectangle (2D-Point 0 2) 2 3)
+      (Rectangle (2D-Point 0 2) 2 3))
 
 
 ;Pruebas Sección II
 
+;Pruebas para setvalueA
+(define a (MArray 5 '(0 0 0 0 0)))
+(test (setvalueA a 0 1)
+      (MArray 5 '(1 0 0 0 0)))
+(test (setvalueA a 1 1)
+      (MArray 5 '(0 1 0 0 0)))
+(test (setvalueA a 2 1)
+      (MArray 5 '(0 0 1 0 0)))
+(test (setvalueA a 3 1)
+      (MArray 5 '(0 0 0 1 0)))
+(test (setvalueA a 4 1)
+      (MArray 5 '(0 0 0 0 1)))
+
 ;Pruebas MArray2MList
-(test (MArray2MList (MArray 0 '())) (MEmpty))
-(test (MArray2MList (MArray 5 '("a" "b"))) (MCons "a" (MCons "b" (MEmpty))))
+(test (MArray2MList (MArray 0 '())) 
+      (MEmpty))
+(test (MArray2MList (MArray 5 '("a" "b"))) 
+      (MCons "a" (MCons "b" (MEmpty))))
+(test (MArray2MList (MArray 3 '(1 2))) 
+      (MCons 1 (MCons 2 (MEmpty))))
+(test (MArray2MList (MArray 3 '(1 2 3)))
+      (MCons 1 (MCons 2 (MCons 3 (MEmpty)))))
+(test (MArray2MList (MArray 6 '("x" "y" "z"))) 
+      (MCons "x" (MCons "y" (MCons "z" (MEmpty)))))
+
 
 ;Pruebas printML
 (test (printML (MEmpty)) "[]")
