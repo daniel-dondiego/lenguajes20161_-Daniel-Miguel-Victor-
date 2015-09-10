@@ -91,6 +91,12 @@
   [(MEmpty? mlist) 0]
   [else (+(lengthML (MCons-next mlist)) 1)]))
 
+;Dada una lista MList y una función regresa la MList con la aplicaicón de la función en cada elemento
+(define (mapML f mlist)
+  (cond
+    [(MEmpty? mlist) (MEmpty)]
+    [else (MCons (f (MCons-value mlist)) (mapML f (MCons-next mlist)))]))
+
 ;-------------------------------------------------------------------------------------------------------------
 
 ;Pruebas del tipo Array.
@@ -126,3 +132,10 @@
 (test (lengthML (MCons 7 (MCons 4 (MCons 1 (MCons 10 (MEmpty)))))) 4)
 (test (lengthML (MCons 3 (MEmpty))) 1)
 (test (lengthML (MCons 7 (MCons 4 (MCons 1 (MEmpty))))) 3)
+
+;Pruebas mapML
+(test (mapML add1 (MCons 7 (MCons 4 (MEmpty)))) (MCons 8 (MCons 5 (MEmpty))))
+(test (mapML (lambda (x) (* x x)) (MCons 10 (MCons 3 (MEmpty)))) (MCons 100 (MCons 9 (MEmpty))))
+(test (mapML add1 (MCons 2(MEmpty))) (MCons 3(MEmpty)))
+(test (mapML (lambda (x) (* x 2)) (MCons 2 (MCons 3 (MEmpty)))) (MCons 4 (MCons 6 (MEmpty))))
+(test (mapML add1 (MCons 1000 (MEmpty))) (MCons 1001(MEmpty)))
