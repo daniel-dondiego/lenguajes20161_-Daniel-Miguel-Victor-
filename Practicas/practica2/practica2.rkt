@@ -91,22 +91,27 @@
   [(MEmpty? mlist) 0]
   [else (+(lengthML (MCons-next mlist)) 1)]))
 
-;Dada una lista MList y una función regresa la MList con la aplicaicón de la función en cada elemento
+;Dada una lista MList y una función regresa la MList con la aplicación de la función en cada elemento
 (define (mapML f mlist)
   (cond
     [(MEmpty? mlist) (MEmpty)]
     [else (MCons (f (MCons-value mlist)) (mapML f (MCons-next mlist)))]))
 
+;Dada una MList y un predicado regresa una MList con los argumentos qe regresan falso
+(define (filterML p mlist)
+  (cond
+    [(MEmpty? mlist) (MEmpty)]
+    [else (if (p (MCons-value mlist))
+              (MCons (MCons-value mlist) (filterML p (MCons-next mlist)))
+              (filterML p (MCons-next mlist)))]))
+
+
 ;-------------------------------------------------------------------------------------------------------------
 
 ;Pruebas del tipo Array.
+(test (Array? (MArray 4 '("a" "b"))) #t)
 (test (Array? (MArray 0 '())) #t)
-(test (Array? (MArray 1 '(8))) #t)
-(test (Array? (MArray 4 '(1 2 3 4))) #t)
-(test (Array? (MArray 4 '(1 2 3))) #t)
-(test (Array? (MArray 7 '(1))) #t)
 
-;
 (test (MEmpty) (MEmpty))
 
 (test (TLEmpty) (TLEmpty))
@@ -143,3 +148,10 @@
 (test (mapML add1 (MCons 2(MEmpty))) (MCons 3(MEmpty)))
 (test (mapML (lambda (x) (* x 2)) (MCons 2 (MCons 3 (MEmpty)))) (MCons 4 (MCons 6 (MEmpty))))
 (test (mapML add1 (MCons 1000 (MEmpty))) (MCons 1001(MEmpty)))
+
+;Pruebas filterML
+(test (filterML (lambda (x) (not (zero? x))) (MCons 2 (MCons 0 (MCons 1 (MEmpty)))))  (MCons 2 (MCons 1 (MEmpty))))
+(test (filterML (lambda (l) (not (MEmpty? l))) (MCons (MCons 1 (MCons 4 (MEmpty))) (MCons (MEmpty) (MCons 1 (MEmpty)))))(MCons (MCons 1 (MCons 4 (MEmpty))) (MCons 1 (MEmpty))))
+(test (filterML (lambda (x) (= (modulo x 2) 0)) (MCons 1 (MCons 2 (MCons 3 (MCons 4 (MEmpty)))))) (MCons 2 (MCons 4 (MEmpty))))
+(test (filterML (lambda (x) (not (zero? x))) (MCons 3 (MCons 2 (MCons 0 (MCons 0 (MCons 0 (MEmpty))))))) (MCons 3 (MCons 2 (MEmpty))))
+(test (filterML (lambda (x) (not(zero? x))) (MEmpty)) (MEmpty))
