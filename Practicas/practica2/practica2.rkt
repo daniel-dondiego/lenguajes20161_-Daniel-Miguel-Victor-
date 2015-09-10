@@ -100,9 +100,13 @@
 ;-------------------------------------------------------------------------------------------------------------
 
 ;Pruebas del tipo Array.
-(test (Array? (MArray 4 '("a" "b"))) #t)
 (test (Array? (MArray 0 '())) #t)
+(test (Array? (MArray 1 '(8))) #t)
+(test (Array? (MArray 4 '(1 2 3 4))) #t)
+(test (Array? (MArray 4 '(1 2 3))) #t)
+(test (Array? (MArray 7 '(1))) #t)
 
+;
 (test (MEmpty) (MEmpty))
 
 (test (TLEmpty) (TLEmpty))
