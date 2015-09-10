@@ -147,6 +147,12 @@
 
 ;Pruebas para el tipo position
 (test (2D-Point 0 0) (2D-Point 0 0))
+(test (2D-Point 1 (sqrt 2)) (2D-Point 1 (sqrt 2)))
+(test (2D-Point 5 3.14159) (2D-Point 5 3.14159))
+(test (2D-Point 0 5) (2D-Point 0 5))
+(test (2D-Point 3 0) (2D-Point 3 0))
+
+;Pruebas para el tipo Figure
 
 
 ;Pruebas Sección II
