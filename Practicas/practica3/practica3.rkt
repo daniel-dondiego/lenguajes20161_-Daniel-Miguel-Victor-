@@ -93,6 +93,8 @@
 (define (aRadianes l)
   (/(* l pi) 180))
 
+;7.Dada una lista de trackpoints, regresar el máximo ritmo cardiaco, el resultado debe ser un entero
+
 
 ;8.Victor
 (define (collapse-trackpoints trackpoints e)
@@ -126,9 +128,7 @@
 
 
 
-(define arbol-base (bns (bns (bns ebt "A" ebt) "B" (bns (bns ebt "C" ebt) "D" (bns ebt "E" ebt)))
-"F"
-(bns ebt "G" (bns (bns ebt "H" ebt) "I" ebt))))
+
 
 ;------------------------------------------------------------------------------------------------------
 ;Tests
