@@ -37,16 +37,6 @@
 ;;3.Regresa una lista de zonas por cada fecuencia cardiaca en lst.
 (define (bpm->zone lst zones)
   (cond
-<<<<<<< HEAD
-    [(empty? mz) empty]))
-
-;;4.Dado una lista en la que cada elemento de la lista contiene: un tiempo en formato UNIX,
-;;una lista con la latitud y longitud y finalmente el ritmo cardiaco. Como segundo parámetro se tiene una lista
-;;de zonas cardiacas con lo que se tiene que regresar una lista de trackpoints que contengan la información
-;;dada. 
-(define (create-trackpoints lst zones)
-  (if (empty? lst) empty
-=======
     [(or (empty? lst)(empty? zones)) '()]  
     [else (append
            (cond
@@ -74,10 +64,9 @@
 (define (create-trackpoints l zones)
   (if (empty? l)
       empty
->>>>>>> f5aaa353155bd14133aca21933ce7adaacfe40ac
        (cons
-        (trackpoint (GPS (first (second (car lst))) (second (second (car lst)))) (third (car lst)) (first (bpm->zone (list (third (car lst))) zones)) (first (car lst)))
-        (create-trackpoints (cdr lst) zones) )))
+        (trackpoint (GPS (first (second (car l))) (second (second (car l)))) (third (car l)) (first (bpm->zone (list (third (car l))) zones)) (first (car l)))
+        (create-trackpoints (cdr l) zones) )))
 
 ;5.Dada una lista trackpoints devuelve la distancia total
 ;Victor
@@ -152,11 +141,24 @@
 (define (nnBT h)
   (empty? h))
 
+;12.mapBT
+;Dado una función de aridad 1 y un árbol de tipo BTree, aplicar la función sobre todos los valores de los nodos del árbol.
+(define (mapBT f tree)
+  (cond
+    [(EmptyBT? tree) (EmptyBT)]
+    [else (bnn (mapBT f (BNode-l tree)) (f (BNode-e tree)) (mapBT f (BNode-r tree)))]))
 
+;--------------------------------------RECORRIDOS EN ÁRBOLES-------------------------------------------
 
-(define arbol-base (bns (bns (bns ebt "A" ebt) "B" (bns (bns ebt "C" ebt) "D" (bns ebt "E" ebt)))
-"F"
-(bns ebt "G" (bns (bns ebt "H" ebt) "I" ebt))))
+;1.preorderBT
+
+;2.inorderBT
+
+;3.posorderBT
+(define (posorderBT tree)
+  (cond
+    [(EmptyBT? tree) '()]
+    [else (append (posorderBT (BNode-l tree)) (posorderBT (BNode-r tree)) (list (BNode-e tree)))]))
 
 ;------------------------------------------------------------------------------------------------------
 ;Tests
@@ -171,61 +173,20 @@
        (anaerobic 154.0 166.0)
        (maximum 167.0 180.0)))
 
-(test (zones 0 0)
-      (list 
-       (resting 0 -1) 
-       (warm-up 0 -1) 
-       (fat-burning 0 -1) 
-       (aerobic 0 -1) 
-       (anaerobic 0 -1) 
-       (maximum 0 0)))
-
-(test (zones 5 18)
-      (list
-       (resting 5 10.5)
-       (warm-up 11.5 11.8)
-       (fat-burning 12.8 13.1)
-       (aerobic 14.1 14.4)
-       (anaerobic 15.4 15.700000000000001)
-       (maximum 16.700000000000003 18.0)))
-
-(test (zones 10 20)
-      (list
-       (resting 10 14.0)
-       (warm-up 15.0 15.0)
-       (fat-burning 16.0 16.0)
-       (aerobic 17.0 17.0)
-       (anaerobic 18.0 18.0)
-       (maximum 19.0 20.0)))
-
-(test (zones 50 100)
-      (list
-       (resting 50 74.0)
-       (warm-up 75.0 79.0)
-       (fat-burning 80.0 84.0)
-       (aerobic 85.0 89.0)
-       (anaerobic 90.0 94.0)
-       (maximum 95.0 100.0)))
-
 ;Tests para get-zone
-(test (get-zone 'resting my-zones) 
-      (resting 50 114.0))
-(test (get-zone 'warm-up my-zones)
-      (warm-up 115.0 127.0))
-(test (get-zone 'fat-burning my-zones)
-      (fat-burning 128.0 140.0))
-(test (get-zone 'aerobic my-zones)
-      (aerobic 141.0 153.0))
-(test (get-zone 'anaerobic my-zones)
-      (anaerobic 154.0 166.0))
-(test (get-zone 'maximum my-zones)
-      (maximum 167.0 180.0))
-
+(test (get-zone 'resting my-zones)(resting 50 114.0))
+(test (get-zone 'warm-up my-zones)(warm-up 115.0 127.0))
+(test (get-zone 'fat-burning my-zones)(fat-burning my-zones))
+(test (get-zone 'aerobic my-zones)(aerobic 141.0 153.0))
+(test (get-zone 'anaerobic my-zones)(anaerobic 154.0 166.0));
+(test (get-zone 'maximum my-zones)(maximum 167.0 180))
 
 ;Test bpm->zone
 (test (bpm->zone empty my-zones) '())
 (test (bpm->zone '(50 60) my-zones) (list (resting 50 114.0) (resting 50 114.0)))
 (test (bpm->zone '(140 141) my-zones) (list (fat-burning 128.0 140.0) (aerobic 141.0 153.0)))
+(test (bpm->zone '(140 141) my-zones) (list (fat-burning 128.0 140.0) (aerobic 141.0 153.0)))             
+(test (bpm->zone '(60 120 150) my-zones) (list (resting 50 114.0) (warm-up 115.0 127.0) (aerobic 141.0 153.0)))
 
 ;Test average-hr
 (test (average-hr empty) 0)
@@ -237,6 +198,9 @@
 ;Test para ninBT
 (test (ninBT (EmptyBT)) 0)
 (test (ninBT (BNode < (BNode < (EmptyBT) 3 (EmptyBT)) 1 (BNode < (EmptyBT) 2 (EmptyBT)))) 1)
+(test (ninBT (bns (bns (bns ebt "A" ebt) "B" (bns (bns ebt "C" ebt) "D" (bns ebt "E" ebt)))"F"(bns ebt "G" (bns (bns ebt "H" ebt) "I" ebt)))) 5)
+(test (ninBT arb1) 0)
+(test (ninBT arb4) 7)
 
 ;;tests para nlBT 
 (test (nlBT arb1) 1)
@@ -244,3 +208,17 @@
 (test (nlBT arb3) 4)
 (test (nlBT arb4) 8)
 (test (nlBT (bnn arb4 5 arb4)) 16)
+
+;;test para mapBT
+(test (mapBT add1 (EmptyBT)) (EmptyBT))
+(test (mapBT sub1 (EmptyBT)) (EmptyBT))
+(test (mapBT (lambda (x) (- 1 x)) (BNode < (EmptyBT) 1 (BNode < (EmptyBT) 2 (EmptyBT)))) (BNode < (EmptyBT) 0 (BNode < (EmptyBT) -1 (EmptyBT))))
+(test (mapBT add1 (BNode < (EmptyBT) 1 (BNode < (EmptyBT) 2 (EmptyBT)))) (BNode < (EmptyBT) 2 (BNode < (EmptyBT) 3 (EmptyBT))))
+(test (mapBT (lambda (x) (* x x)) (BNode < (EmptyBT) 3 (BNode < (EmptyBT) 2 (EmptyBT)))) (BNode < (EmptyBT) 9 (BNode < (EmptyBT) 4 (EmptyBT))))
+
+;;Test posorderBT
+(test (posorderBT (EmptyBT)) '())
+(test (posorderBT arb1) '(1))
+(test (posorderBT maxiarb) '(4 5 2 7 9 6 3 1 4 5 2 7 9 6 3 1 10))
+(test (posorderBT arb4) '(1 1 2 1 1 2 3 1 1 2 1 1 2 3 4))
+(test (posorderBT arbol-base) '("A" "C" "E" "D" "B" "H" "I" "G" "F"))
