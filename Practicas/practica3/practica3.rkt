@@ -3,9 +3,6 @@
 (require "practica3-base.rkt")
 
 ; Seccion 1
-;; auxiliar para calcular el rango entre el ritmo en descanso y el máximo ritmo cardiaco.
-(define (range rest max)
-    (- max rest))
 
 ;1.Dado el ritmo cardiaco de descanso y el máximo ritmo cardiaco de una persona se debe regresar la
 ;lista de zonas de frecuencia cardiaca.
@@ -18,6 +15,10 @@
      (anaerobic (+ rest (* (range rest max) (+ 0.5 (* 0.1 3)))) (+ rest (- (* (range rest max) (+ 0.5 (* 0.1 4))) 1)))
      (maximum (+ rest (* (range rest max) (+ 0.5 (* 0.1 4)))) (+ rest  (* (range rest max) (+ 0.5 (* 0.1 5)))))
     ))
+
+;; auxiliar para calcular el rango entre el ritmo en descanso y el máximo ritmo cardiaco.
+(define (range rest max)
+    (- max rest))
 
 ;Se define para ejemplos
 (define my-zones (zones 50 180))
@@ -34,8 +35,9 @@
     [else (error "El simbolo no esta en la lista")]))
 
 ;;3.Regresa una lista de zonas por cada fecuencia cardiaca en lst.
-(define (bpm->zone lst mz)
+(define (bpm->zone lst zones)
   (cond
+<<<<<<< HEAD
     [(empty? mz) empty]))
 
 ;;4.Dado una lista en la que cada elemento de la lista contiene: un tiempo en formato UNIX,
@@ -44,14 +46,66 @@
 ;;dada. 
 (define (create-trackpoints lst zones)
   (if (empty? lst) empty
+=======
+    [(or (empty? lst)(empty? zones)) '()]  
+    [else (append
+           (cond
+             [(and (>= (car lst) (resting-low (first zones)))(<= (car lst) (resting-high (first zones))))  (list (first zones))]
+             [else '()])
+           (cond
+             [(and (>= (car lst) (warm-up-low (second zones)))(<= (car lst) (warm-up-high (second zones)))) (list (second zones))]
+             [else '()])
+           (cond
+             [(and (>= (car lst) (fat-burning-low (third zones)))(<= (car lst) (fat-burning-high (third zones))))  (list (third zones))]
+             [else '()])
+           (cond
+             [(and (>= (car lst) (aerobic-low (fourth zones)))(<= (car lst) (aerobic-high (fourth zones)))) (list (fourth zones))]
+             [else '()])
+           (cond
+             [(and (>= (car lst) (anaerobic-low (fifth zones)))(<= (car lst) (anaerobic-high (fifth zones)))) (list (fifth zones))]
+             [else '()])
+           (cond
+             [(and (>= (car lst) (maximum-low (sixth zones)))(<= (car lst) (maximum-high (sixth zones))))  (list (sixth zones))]
+             [else '()])
+           (bpm->zone (cdr lst) zones))]))                                        
+               
+;;4
+; Función create-trackpoints 
+(define (create-trackpoints l zones)
+  (if (empty? l)
+      empty
+>>>>>>> f5aaa353155bd14133aca21933ce7adaacfe40ac
        (cons
         (trackpoint (GPS (first (second (car lst))) (second (second (car lst)))) (third (car lst)) (first (bpm->zone (list (third (car lst))) zones)) (first (car lst)))
         (create-trackpoints (cdr lst) zones) )))
 
-;Dada una lista trackpoints devuelve la distancia total
+;5.Dada una lista trackpoints devuelve la distancia total
 ;Victor
 (define (total-distance trackpoints)
   (empty? trackpoints))
+
+;6.average-hr
+;Con una lista de trackpoints regresa el promedio del ritmo cardiaco.
+(define (average-hr lsttk)
+;Funcion auxiliar para sumar hr de una lista de trackpoints.
+  (cond
+    [(empty? lsttk) 0]
+    [else(round(/ (suma lsttk) (length lsttk)))]))
+
+;auxiliar que suma hr de una lista de trackpoints.
+(define (suma lsttk)
+  (cond
+    [(empty? lsttk) 0]
+    [else
+     (define hr-aux (type-case Frame (car lsttk)
+       [trackpoint (loc hr zone unix-time) hr]))
+     (+ hr-aux (suma (cdr lsttk)))]))
+
+;Ejemplos para crear tackpoints
+(define sample (create-trackpoints (take raw-data 100) my-zones))
+(define trackpoints (create-trackpoints raw-data my-zones))
+(define trackpoints1 (create-trackpoints (take raw-data 50) my-zones))
+(define trackpoints2 (create-trackpoints (take raw-data 400) my-zones))
 
 ; Funcion haversine que devuelve la distancia entre dos coordenadas
 ; Auxiliar para total-distance
@@ -79,14 +133,13 @@
 ;Sección 2
 
 
-;;nlBT 
+;10.nlBT 
 ;;Dado un árbol de tipo BTree, determinar el número de hojas no vacías.
 (define (nlBT tree)
   (cond
     [(EmptyBT? tree) 0] ;; caso base 
     [(and (EmptyBT? (BNode-l tree)) (EmptyBT? (BNode-r tree))) 1] ;; si ambos nodos hijos son vacíos entonces es hoja y es no vacía ya que no cayó en el caso anterior asi que la sumamos 
     [else (+ (nlBT (BNode-l tree)) (nlBT(BNode-r tree)) )])) ;; recursa sobre cada sub arbol y suma el resultado de estos
-
 
 ;Determina el número de nodos que tiene el árbol sin hojas vacias
 ;Victor
@@ -157,9 +210,18 @@
 (test (get-zone 'maximum my-zones)
       (maximum 167.0 180.0))
 
-;Test bpm->zone
-;(test (bpm->zone empty my-zones) '())
 
+;Test bpm->zone
+(test (bpm->zone empty my-zones) '())
+(test (bpm->zone '(50 60) my-zones) (list (resting 50 114.0) (resting 50 114.0)))
+(test (bpm->zone '(140 141) my-zones) (list (fat-burning 128.0 140.0) (aerobic 141.0 153.0)))
+
+;Test average-hr
+(test (average-hr empty) 0)
+(test (average-hr sample) 134)
+(test (average-hr trackpoints) 150)
+(test (average-hr trackpoints1) 128)
+(test (average-hr trackpoints2) 147)
 
 ;;tests para nlBT 
 (test (nlBT arb1) 1)
