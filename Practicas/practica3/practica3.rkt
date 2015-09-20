@@ -5,9 +5,9 @@
 ; Seccion 1
 
 ;Se define para ejemplos
-(define my zones (zones 50 180))
+(define my-zones (zones 50 180))
 
-;Dada una zona y una lista regresa el tipo de dato correspondiente
+;2.Dada una zona y una lista regresa el tipo de dato correspondiente
 (define (get-zone symbol lst)
   (cond
     [(eq? symbol 'resting) (list-ref lst 0)]
@@ -17,6 +17,11 @@
     [(eq? symbol 'anaerobic) (list-ref lst 4)]
     [(eq? symbol 'maximum) (list-ref lst 5)]
     [else (error "El simbolo no esta en la lista")]))
+
+;;3.Regresa una lista de zonas por cada fecuencia cardiaca en lst.
+(define (bpm->zone lst mz)
+  (cond
+    [(empty? mz) empty]))
 
 ;Dada una lista trackpoints devuelve la distancia total
 ;Victor
@@ -84,3 +89,5 @@
 (test (get-zone 'maximum my-zones)
       (maximum 167.0 180))
 
+;Test bpm->zone
+(test (bpm->zone empty my-zones) '())
