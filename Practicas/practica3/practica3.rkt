@@ -106,19 +106,55 @@
        (anaerobic 154.0 166.0)
        (maximum 167.0 180.0)))
 
+(test (zones 0 0)
+      (list 
+       (resting 0 -1) 
+       (warm-up 0 -1) 
+       (fat-burning 0 -1) 
+       (aerobic 0 -1) 
+       (anaerobic 0 -1) 
+       (maximum 0 0)))
+
+(test (zones 5 18)
+      (list
+       (resting 5 10.5)
+       (warm-up 11.5 11.8)
+       (fat-burning 12.8 13.1)
+       (aerobic 14.1 14.4)
+       (anaerobic 15.4 15.700000000000001)
+       (maximum 16.700000000000003 18.0)))
+
+(test (zones 10 20)
+      (list
+       (resting 10 14.0)
+       (warm-up 15.0 15.0)
+       (fat-burning 16.0 16.0)
+       (aerobic 17.0 17.0)
+       (anaerobic 18.0 18.0)
+       (maximum 19.0 20.0)))
+
+(test (zones 50 100)
+      (list
+       (resting 50 74.0)
+       (warm-up 75.0 79.0)
+       (fat-burning 80.0 84.0)
+       (aerobic 85.0 89.0)
+       (anaerobic 90.0 94.0)
+       (maximum 95.0 100.0)))
+
 ;Tests para get-zone
 (test (get-zone 'resting my-zones) 
       (resting 50 114.0))
 (test (get-zone 'warm-up my-zones)
       (warm-up 115.0 127.0))
 (test (get-zone 'fat-burning my-zones)
-      (fat-burning my-zones))
+      (fat-burning 128.0 140.0))
 (test (get-zone 'aerobic my-zones)
       (aerobic 141.0 153.0))
 (test (get-zone 'anaerobic my-zones)
       (anaerobic 154.0 166.0))
 (test (get-zone 'maximum my-zones)
-      (maximum 167.0 180))
+      (maximum 167.0 180.0))
 
 ;Test bpm->zone
 ;(test (bpm->zone empty my-zones) '())
