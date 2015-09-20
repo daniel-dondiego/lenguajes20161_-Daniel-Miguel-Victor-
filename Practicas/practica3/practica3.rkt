@@ -86,13 +86,6 @@
     [(and (EmptyBT? (BNode-l tree)) (EmptyBT? (BNode-r tree))) 1] ;; si ambos nodos hijos son vacíos entonces es hoja y es no vacía ya que no cayó en el caso anterior asi que la sumamos 
     [else (+ (nlBT (BNode-l tree)) (nlBT(BNode-r tree)) )])) ;; recursa sobre cada sub arbol y suma el resultado de estos
 
-;;tests para nlBT 
-(test (nlBT arb1) 1)
-(test (nlBT arb2) 2)
-(test (nlBT arb3) 4)
-(test (nlBT arb4) 8)
-(test (nlBT (bnn arb4 5 arb4)) 16)
-
 
 ;Determina el número de nodos que tiene el árbol sin hojas vacias
 ;Victor
@@ -111,7 +104,7 @@
        (fat-burning 128.0 140.0)
        (aerobic 141.0 153.0)
        (anaerobic 154.0 166.0)
-       (maximum 167.0 180)))
+       (maximum 167.0 180.0)))
 
 ;Tests para get-zone
 (test (get-zone 'resting my-zones) 
@@ -130,3 +123,10 @@
 ;Test bpm->zone
 ;(test (bpm->zone empty my-zones) '())
 
+
+;;tests para nlBT 
+(test (nlBT arb1) 1)
+(test (nlBT arb2) 2)
+(test (nlBT arb3) 4)
+(test (nlBT arb4) 8)
+(test (nlBT (bnn arb4 5 arb4)) 16)
