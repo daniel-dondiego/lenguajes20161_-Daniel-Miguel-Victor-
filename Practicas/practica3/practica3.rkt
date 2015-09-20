@@ -94,7 +94,7 @@
   (/(* l pi) 180))
 
 
-;Victor
+;8.Victor
 (define (collapse-trackpoints trackpoints e)
   (cond
     [(empty? trackpoints) '()]
@@ -104,6 +104,12 @@
 
 ;Sección 2
 
+;9.ninBT
+;;Dado un árbol de tipo BTree determinar el número de nodos internos que tiene.
+(define (ninBT tree)
+  (cond
+    [(or (EmptyBT? tree) (and (EmptyBT? (BNode-l tree)) (EmptyBT? (BNode-r tree)))) 0]    
+    [else (+ 1 (ninBT (BNode-l tree)) (ninBT (BNode-r tree)))]))
 
 ;10.nlBT 
 ;;Dado un árbol de tipo BTree, determinar el número de hojas no vacías.
@@ -113,11 +119,16 @@
     [(and (EmptyBT? (BNode-l tree)) (EmptyBT? (BNode-r tree))) 1] ;; si ambos nodos hijos son vacíos entonces es hoja y es no vacía ya que no cayó en el caso anterior asi que la sumamos 
     [else (+ (nlBT (BNode-l tree)) (nlBT(BNode-r tree)) )])) ;; recursa sobre cada sub arbol y suma el resultado de estos
 
-;Determina el número de nodos que tiene el árbol sin hojas vacias
+;11.Determina el número de nodos que tiene el árbol sin hojas vacias
 ;Victor
 (define (nnBT h)
   (empty? h))
 
+
+
+(define arbol-base (bns (bns (bns ebt "A" ebt) "B" (bns (bns ebt "C" ebt) "D" (bns ebt "E" ebt)))
+"F"
+(bns ebt "G" (bns (bns ebt "H" ebt) "I" ebt))))
 
 ;------------------------------------------------------------------------------------------------------
 ;Tests
@@ -194,6 +205,10 @@
 (test (average-hr trackpoints) 150)
 (test (average-hr trackpoints1) 128)
 (test (average-hr trackpoints2) 147)
+
+;Test para ninBT
+(test (ninBT (EmptyBT)) 0)
+(test (ninBT (BNode < (BNode < (EmptyBT) 3 (EmptyBT)) 1 (BNode < (EmptyBT) 2 (EmptyBT)))) 1)
 
 ;;tests para nlBT 
 (test (nlBT arb1) 1)
