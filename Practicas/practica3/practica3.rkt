@@ -180,10 +180,10 @@
 ;Tests para get-zone
 (test (get-zone 'resting my-zones)(resting 50 114.0))
 (test (get-zone 'warm-up my-zones)(warm-up 115.0 127.0))
-(test (get-zone 'fat-burning my-zones)(fat-burning my-zones))
+(test (get-zone 'fat-burning my-zones)(fat-burning 128.0 140.0))
 (test (get-zone 'aerobic my-zones)(aerobic 141.0 153.0))
 (test (get-zone 'anaerobic my-zones)(anaerobic 154.0 166.0));
-(test (get-zone 'maximum my-zones)(maximum 167.0 180))
+(test (get-zone 'maximum my-zones)(maximum 167.0 180.0))
 
 ;Test bpm->zone
 (test (bpm->zone empty my-zones) '())
