@@ -37,47 +37,19 @@
 ;;3.Regresa una lista de zonas por cada fecuencia cardiaca en lst.
 (define (bpm->zone lst zones)
   (cond
-<<<<<<< HEAD
-    [(empty? mz) empty]))
+    [(empty? lst) empty]))
 
 ;;4.Dado una lista en la que cada elemento de la lista contiene: un tiempo en formato UNIX,
 ;;una lista con la latitud y longitud y finalmente el ritmo cardiaco. Como segundo parámetro se tiene una lista
 ;;de zonas cardiacas con lo que se tiene que regresar una lista de trackpoints que contengan la información
-;;dada. 
+;;dada.  
 (define (create-trackpoints lst zones)
-  (if (empty? lst) empty
-=======
-    [(or (empty? lst)(empty? zones)) '()]  
-    [else (append
-           (cond
-             [(and (>= (car lst) (resting-low (first zones)))(<= (car lst) (resting-high (first zones))))  (list (first zones))]
-             [else '()])
-           (cond
-             [(and (>= (car lst) (warm-up-low (second zones)))(<= (car lst) (warm-up-high (second zones)))) (list (second zones))]
-             [else '()])
-           (cond
-             [(and (>= (car lst) (fat-burning-low (third zones)))(<= (car lst) (fat-burning-high (third zones))))  (list (third zones))]
-             [else '()])
-           (cond
-             [(and (>= (car lst) (aerobic-low (fourth zones)))(<= (car lst) (aerobic-high (fourth zones)))) (list (fourth zones))]
-             [else '()])
-           (cond
-             [(and (>= (car lst) (anaerobic-low (fifth zones)))(<= (car lst) (anaerobic-high (fifth zones)))) (list (fifth zones))]
-             [else '()])
-           (cond
-             [(and (>= (car lst) (maximum-low (sixth zones)))(<= (car lst) (maximum-high (sixth zones))))  (list (sixth zones))]
-             [else '()])
-           (bpm->zone (cdr lst) zones))]))                                        
+  (cond 
+    [(empty? lst) empty]
+    [else (cons ((trackpoint (GPS (car (second (car lst))) (second (second (car lst)))) (third (car lst)) (car (bpm->zone (list (third (car lst))) zones)) (car (car lst))))
+                (create-trackpoints (cdr lst) zones))]))
                
-;;4
-; Función create-trackpoints 
-(define (create-trackpoints l zones)
-  (if (empty? l)
-      empty
->>>>>>> f5aaa353155bd14133aca21933ce7adaacfe40ac
-       (cons
-        (trackpoint (GPS (first (second (car lst))) (second (second (car lst)))) (third (car lst)) (first (bpm->zone (list (third (car lst))) zones)) (first (car lst)))
-        (create-trackpoints (cdr lst) zones) )))
+
 
 ;5.Dada una lista trackpoints devuelve la distancia total
 ;Victor
