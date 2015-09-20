@@ -18,8 +18,13 @@
     [(eq? symbol 'maximum) (list-ref lst 5)]
     [else (error "El simbolo no esta en la lista")]))
 
-     
+;Dada una lista trackpoints devuelve la distancia total
+;Victor
+(define (total-distance trackpoints)
+  (empty? trackpoints))
+
 ; Funcion haversine que devuelve la distancia entre dos coordenadas
+; Auxiliar para total-distance
 (define (haversine x y )
   (* (* 2 6371) (asin(sqrt(auxHaversine x y))) ))
 
@@ -33,6 +38,23 @@
   (/(* l pi) 180))
 
 
+;Victor
+(define (collapse-trackpoints trackpoints e)
+  (cond
+    [(empty? trackpoints) '()]
+    [(empty? (cdr trackpoints)) (list (car trackpoints))]
+    [else (empty? trackpoints)]))
+
+
+;Sección 2
+
+
+
+
+;Determina el número de nodos que tiene el árbol sin hojas vacias
+;Victor
+(define (nnBT h)
+  (empty? h))
 
 
 ;------------------------------------------------------------------------------------------------------
@@ -61,3 +83,4 @@
       (anaerobic 154.0 166.0))
 (test (get-zone 'maximum my-zones)
       (maximum 167.0 180))
+
