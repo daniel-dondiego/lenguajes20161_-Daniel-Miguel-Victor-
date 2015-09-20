@@ -38,14 +38,15 @@
   (cond
     [(empty? mz) empty]))
 
-;;4
-; Función create-trackpoints 
-(define (create-trackpoints l zones)
-  (if (empty? l)
-      empty
+;;4.Dado una lista en la que cada elemento de la lista contiene: un tiempo en formato UNIX,
+;;una lista con la latitud y longitud y finalmente el ritmo cardiaco. Como segundo parámetro se tiene una lista
+;;de zonas cardiacas con lo que se tiene que regresar una lista de trackpoints que contengan la información
+;;dada. 
+(define (create-trackpoints lst zones)
+  (if (empty? lst) empty
        (cons
-        (trackpoint (GPS (first (second (car l))) (second (second (car l)))) (third (car l)) (first (bpm->zone (list (third (car l))) zones)) (first (car l)))
-        (create-trackpoints (cdr l) zones) )))
+        (trackpoint (GPS (first (second (car lst))) (second (second (car lst)))) (third (car lst)) (first (bpm->zone (list (third (car lst))) zones)) (first (car lst)))
+        (create-trackpoints (cdr lst) zones) )))
 
 ;Dada una lista trackpoints devuelve la distancia total
 ;Victor
