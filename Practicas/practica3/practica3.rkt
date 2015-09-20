@@ -3,6 +3,21 @@
 (require "practica3-base.rkt")
 
 ; Seccion 1
+;; auxiliar para calcular el rango entre el ritmo en descanso y el máximo ritmo cardiaco.
+(define (range rest max)
+    (- max rest))
+
+;1.Dado el ritmo cardiaco de descanso y el máximo ritmo cardiaco de una persona se debe regresar la
+;lista de zonas de frecuencia cardiaca.
+(define (zones rest max )
+    (list
+     (resting rest (+ rest(- (* (range rest max) 0.5) 1)))
+     (warm-up (+ rest (* (range rest max) (+ 0.5 (* 0.1 0)))) (+ rest (- (* (range rest max) (+ 0.5 (* 0.1 1))) 1)))
+     (fat-burning (+ rest (* (range rest max) (+ 0.5 (* 0.1 1)))) (+ rest (- (* (range rest max) (+ 0.5 (* 0.1 2))) 1)))
+     (aerobic (+ rest (* (range rest max) (+ 0.5 (* 0.1 2)))) (+ rest (- (* (range rest max) (+ 0.5 (* 0.1 3))) 1)))
+     (anaerobic (+ rest (* (range rest max) (+ 0.5 (* 0.1 3)))) (+ rest (- (* (range rest max) (+ 0.5 (* 0.1 4))) 1)))
+     (maximum (+ rest (* (range rest max) (+ 0.5 (* 0.1 4)))) (+ rest  (* (range rest max) (+ 0.5 (* 0.1 5)))))
+    ))
 
 ;Se define para ejemplos
 (define my-zones (zones 50 180))
@@ -22,6 +37,15 @@
 (define (bpm->zone lst mz)
   (cond
     [(empty? mz) empty]))
+
+;;4
+; Función create-trackpoints 
+(define (create-trackpoints l zones)
+  (if (empty? l)
+      empty
+       (cons
+        (trackpoint (GPS (first (second (car l))) (second (second (car l)))) (third (car l)) (first (bpm->zone (list (third (car l))) zones)) (first (car l)))
+        (create-trackpoints (cdr l) zones) )))
 
 ;Dada una lista trackpoints devuelve la distancia total
 ;Victor
@@ -104,5 +128,5 @@
       (maximum 167.0 180))
 
 ;Test bpm->zone
-(test (bpm->zone empty my-zones) '())
+;(test (bpm->zone empty my-zones) '())
 
