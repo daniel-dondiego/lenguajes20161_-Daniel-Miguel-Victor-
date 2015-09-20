@@ -68,10 +68,33 @@
         (trackpoint (GPS (first (second (car l))) (second (second (car l)))) (third (car l)) (first (bpm->zone (list (third (car l))) zones)) (first (car l)))
         (create-trackpoints (cdr l) zones) )))
 
-;Dada una lista trackpoints devuelve la distancia total
+;5.Dada una lista trackpoints devuelve la distancia total
 ;Victor
 (define (total-distance trackpoints)
   (empty? trackpoints))
+
+;6.average-hr
+;Con una lista de trackpoints regresa el promedio del ritmo cardiaco.
+(define (average-hr lsttk)
+;Funcion auxiliar para sumar hr de una lista de trackpoints.
+  (cond
+    [(empty? lsttk) 0]
+    [else(round(/ (suma lsttk) (length lsttk)))]))
+
+;auxiliar que suma hr de una lista de trackpoints.
+(define (suma lsttk)
+  (cond
+    [(empty? lsttk) 0]
+    [else
+     (define hr-aux (type-case Frame (car lsttk)
+       [trackpoint (loc hr zone unix-time) hr]))
+     (+ hr-aux (suma (cdr lsttk)))]))
+
+;Ejemplos para crear tackpoints
+(define sample (create-trackpoints (take raw-data 100) my-zones))
+(define trackpoints (create-trackpoints raw-data my-zones))
+(define trackpoints1 (create-trackpoints (take raw-data 50) my-zones))
+(define trackpoints2 (create-trackpoints (take raw-data 400) my-zones))
 
 ; Funcion haversine que devuelve la distancia entre dos coordenadas
 ; Auxiliar para total-distance
@@ -138,6 +161,13 @@
 (test (bpm->zone empty my-zones) '())
 (test (bpm->zone '(50 60) my-zones) (list (resting 50 114.0) (resting 50 114.0)))
 (test (bpm->zone '(140 141) my-zones) (list (fat-burning 128.0 140.0) (aerobic 141.0 153.0)))
+
+;Test average-hr
+(test (average-hr empty) 0)
+(test (average-hr sample) 134)
+(test (average-hr trackpoints) 150)
+(test (average-hr trackpoints1) 128)
+(test (average-hr trackpoints2) 147)
 
 ;;tests para nlBT 
 (test (nlBT arb1) 1)
