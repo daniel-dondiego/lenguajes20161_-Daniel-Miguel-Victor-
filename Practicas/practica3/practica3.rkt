@@ -19,8 +19,23 @@
     [else (error "El simbolo no esta en la lista")]))
 
      
-     
-     
+; Funcion haversine que devuelve la distancia entre dos coordenadas
+(define (haversine x y )
+  (* (* 2 6371) (asin(sqrt(auxHaversine x y))) ))
+
+;Aux para obtener el valor dentro de la raíz
+(define (auxHaversine x y)
+  (+ (* (sin(/ (- (aRadianes (GPS-lat y)) (aRadianes (GPS-lat x))) 2)) (sin(/ (- (aRadianes (GPS-lat y)) (aRadianes (GPS-lat x))) 2)))
+     (* (* (sin(/ (- (aRadianes (GPS-long y)) (aRadianes (GPS-long x))) 2)) (sin(/ (- (aRadianes (GPS-long y)) (aRadianes (GPS-long x))) 2))) (* (cos(aRadianes (GPS-lat x))) (cos(aRadianes (GPS-lat y)))) )))
+
+;Aux para transformar a Radianes (haversine)
+(define (aRadianes l)
+  (/(* l pi) 180))
+
+
+
+
+;------------------------------------------------------------------------------------------------------
 ;Tests
 
 ;Zones
