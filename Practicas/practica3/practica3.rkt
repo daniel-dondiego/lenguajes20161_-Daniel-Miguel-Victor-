@@ -153,7 +153,10 @@
 ;--------------------------------------RECORRIDOS EN ÁRBOLES-------------------------------------------
 
 ;1.preorderBT
-
+(define (preorderBT tree)
+  (cond
+    [(EmptyBT? tree) '()]
+    [else (append (list (BNode-e tree)) (preorderBT (BNode-l tree)) (preorderBT (BNode-r tree)))]))
 
 ;2.inorderBT
 
@@ -167,7 +170,7 @@
 ;------------------------------------------------------------------------------------------------------
 ;Tests
 
-;Zones
+;Test para zone
 (test (zones 50 180)
       (list
        (resting 50 114.0)
@@ -219,6 +222,13 @@
 (test (mapBT (lambda (x) (- 1 x)) (BNode < (EmptyBT) 1 (BNode < (EmptyBT) 2 (EmptyBT)))) (BNode < (EmptyBT) 0 (BNode < (EmptyBT) -1 (EmptyBT))))
 (test (mapBT add1 (BNode < (EmptyBT) 1 (BNode < (EmptyBT) 2 (EmptyBT)))) (BNode < (EmptyBT) 2 (BNode < (EmptyBT) 3 (EmptyBT))))
 (test (mapBT (lambda (x) (* x x)) (BNode < (EmptyBT) 3 (BNode < (EmptyBT) 2 (EmptyBT)))) (BNode < (EmptyBT) 9 (BNode < (EmptyBT) 4 (EmptyBT))))
+
+;;Test preorderBT
+(test (preorderBT (EmptyBT)) '())
+(test (preorderBT arb1) '(1))
+(test (preorderBT maxiarb) '(10 1 2 4 5 3 6 7 9 1 2 4 5 3 6 7 9))
+(test (preorderBT arb4) '(4 3 2 1 1 2 1 1 3 2 1 1 2 1 1))
+(test (preorderBT arbol-base) '("F" "B" "A" "D" "C" "E" "G" "I" "H"))
 
 ;;Test posorderBT
 (test (posorderBT (EmptyBT)) '())
