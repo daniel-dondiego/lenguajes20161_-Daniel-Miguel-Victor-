@@ -122,7 +122,9 @@
 
 ;7.Dada una lista de trackpoints, regresar el máximo ritmo cardiaco, el resultado debe ser un entero
 (define (max-hr lst)
-  (auxMax-hr  lst (trackpoint-hr (car lst)))) ;; usa auxiliar
+  (cond 
+    [(empty? lst) 0]
+    [else (auxMax-hr  lst (trackpoint-hr (car lst)))])) ;; usa auxiliar
 
 ;;función auxiliar para max-hr recibe una lista de trackpoints y el máximo hasta ese momento
 (define (auxMax-hr lst num) 
@@ -302,6 +304,13 @@
        (trackpoint (GPS 19.4907258 -99.24101) 104 (resting 50 114.0) 1425619655)
        (trackpoint (GPS 19.4907258 -99.24101) 108 (resting 50 114.0) 1425619658)
        (trackpoint (GPS 19.4907107 -99.2410833) 106 (resting 50 114.0) 1425619662)))
+
+;Test average-hr
+(test (max-hr empty) 0)
+(test (max-hr sample) 147)
+(test (max-hr trackpoints) 165)
+(test (max-hr trackpoints1) 136)
+(test (max-hr trackpoints2) 165)
 
 ;Test para ninBT
 (test (ninBT (EmptyBT)) 0)
