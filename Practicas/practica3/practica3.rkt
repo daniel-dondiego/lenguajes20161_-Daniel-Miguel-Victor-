@@ -71,9 +71,15 @@
         (create-trackpoints (cdr lst) zones) )]))
 
 ;5.Dada una lista trackpoints devuelve la distancia total
-;Victor
-(define (total-distance trackpoints)
-  (empty? trackpoints))
+(define (total-distance listtk)
+  (cond
+    [(or (empty? listtk) (empty? (cdr listtk)))0]    
+    [else
+     (define aux1 (type-case Frame (car listtk)
+       [trackpoint (loc hr zone unix-time) loc]))
+    (define aux2 (type-case Frame (car(cdr listtk))
+       [trackpoint (loc hr zone unix-time) loc]))
+     (+ (haversine aux1 aux2) (total-distance (cdr listtk)))]))
 
 ;6.average-hr
 ;Con una lista de trackpoints regresa el promedio del ritmo cardiaco.
@@ -193,7 +199,7 @@
        (maximum 167.0 180.0)))
 
 ;Tests para get-zone
-(test (get-zone 'resting my-zones)(resting 50 114.0))
+(test (get-zone 'resting my-zones)(resting 50.0 114.0))
 (test (get-zone 'warm-up my-zones)(warm-up 115.0 127.0))
 (test (get-zone 'fat-burning my-zones)(fat-burning 128.0 140.0))
 (test (get-zone 'aerobic my-zones)(aerobic 141.0 153.0))
