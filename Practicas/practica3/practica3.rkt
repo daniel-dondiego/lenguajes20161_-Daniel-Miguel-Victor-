@@ -7,7 +7,7 @@
 ;1.Dado el ritmo cardiaco de descanso y el máximo ritmo cardiaco de una persona se debe regresar la
 ;lista de zonas de frecuencia cardiaca.
 (define (zones rest max )
-    (list
+    (list ;;aplicamos la formula para los estados
      (resting rest (+ rest(- (* (range rest max) 0.5) 1)))
      (warm-up (+ rest (* (range rest max) (+ 0.5 (* 0.1 0)))) (+ rest (- (* (range rest max) (+ 0.5 (* 0.1 1))) 1)))
      (fat-burning (+ rest (* (range rest max) (+ 0.5 (* 0.1 1)))) (+ rest (- (* (range rest max) (+ 0.5 (* 0.1 2))) 1)))
@@ -59,14 +59,16 @@
              [else '()])
            (bpm->zone (cdr lst) zones))]))                                        
                
-;;4
-; Función create-trackpoints 
-(define (create-trackpoints l zones)
-  (if (empty? l)
-      empty
-       (cons
-        (trackpoint (GPS (first (second (car l))) (second (second (car l)))) (third (car l)) (first (bpm->zone (list (third (car l))) zones)) (first (car l)))
-        (create-trackpoints (cdr l) zones) )))
+;;4.Dado una lista en la que cada elemento de la lista contiene: un tiempo en formato UNIX,
+;;una lista con la latitud y longitud y finalmente el ritmo cardiaco. Como segundo parámetro se tiene una lista
+;;de zonas cardiacas con lo que se tiene que regresar una lista de trackpoints que contengan la información
+;;dada. 
+(define (create-trackpoints lst zones)
+  (cond 
+    [(empty? lst) '()] ;; si la lista es vacia no construimos nada, regresamos la lista vacía
+    [else (cons ;; sino construimos la lista acomodando cada parametro de la lista de entrada
+        (trackpoint (GPS (first (second (car lst))) (second (second (car lst)))) (third (car lst)) (first (bpm->zone (list (third (car lst))) zones)) (first (car lst)))
+        (create-trackpoints (cdr lst) zones) )]))
 
 ;5.Dada una lista trackpoints devuelve la distancia total
 ;Victor
@@ -111,7 +113,17 @@
   (/(* l pi) 180))
 
 ;7.Dada una lista de trackpoints, regresar el máximo ritmo cardiaco, el resultado debe ser un entero
+(define (max-hr lst)
+  (auxMax-hr  lst (trackpoint-hr (car lst)))) ;; usa auxiliar
 
+;;función auxiliar para max-hr recibe una lista de trackpoints y el máximo hasta ese momento
+(define (auxMax-hr lst num) 
+  (cond 
+    [(empty? lst) num] ;;si la lista es vacia, terminamos de recorrerla y devolvemos el máximo encontrado
+    [else
+     (cond ;;comparamos el maximo hasta el momento con el siguiente ritmo cardiaco
+       [(> num (trackpoint-hr (car lst))) (auxMax-hr (cdr lst) num)] ;;si el máximo es mayor a el ritmo cardiaco de la lista continuamos con el siguiente
+       [else (auxMax-hr (cdr lst) (trackpoint-hr (car lst)))])])) ;; de lo contrario recursamos ahora con el nuevo máximo
 
 ;8.Victor
 (define (collapse-trackpoints trackpoints e)
