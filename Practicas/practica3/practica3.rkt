@@ -198,6 +198,42 @@
        (anaerobic 154.0 166.0)
        (maximum 167.0 180.0)))
 
+(test (zones 0 0)
+      (list 
+       (resting 0 -1) 
+       (warm-up 0 -1) 
+       (fat-burning 0 -1) 
+       (aerobic 0 -1) 
+       (anaerobic 0 -1) 
+       (maximum 0 0)))
+
+(test (zones 10 30)
+      (list
+       (resting 10 19.0)
+       (warm-up 20.0 21.0)
+       (fat-burning 22.0 23.0)
+       (aerobic 24.0 25.0)
+       (anaerobic 26.0 27.0)
+       (maximum 28.0 30.0)))
+
+(test (zones 10 100)
+      (list
+       (resting 10 54.0)
+       (warm-up 55.0 63.0)
+       (fat-burning 64.0 72.0)
+       (aerobic 73.0 81.0)
+       (anaerobic 82.0 90.0)
+       (maximum 91.0 100.0)))
+
+(test (zones 50 150)
+      (list
+       (resting 50 99.0)
+       (warm-up 100.0 109.0)
+       (fat-burning 110.0 119.0)
+       (aerobic 120.0 129.0)
+       (anaerobic 130.0 139.0)
+       (maximum 140.0 150.0)))
+
 ;Tests para get-zone
 (test (get-zone 'resting my-zones)(resting 50.0 114.0))
 (test (get-zone 'warm-up my-zones)(warm-up 115.0 127.0))
@@ -212,6 +248,32 @@
 (test (bpm->zone '(140 141) my-zones) (list (fat-burning 128.0 140.0) (aerobic 141.0 153.0)))
 (test (bpm->zone '(140 141) my-zones) (list (fat-burning 128.0 140.0) (aerobic 141.0 153.0)))             
 (test (bpm->zone '(60 120 150) my-zones) (list (resting 50 114.0) (warm-up 115.0 127.0) (aerobic 141.0 153.0)))
+
+;Test create-trackpoints
+(test (create-trackpoints (take raw-data 0) my-zones)
+      '())
+
+(test (create-trackpoints (take raw-data 1) my-zones)
+      (list 
+       (trackpoint (GPS 19.4907258 -99.24101) 104 (resting 50 114.0) 1425619654)))
+
+(test (create-trackpoints (take raw-data 2) my-zones)
+      (list
+       (trackpoint (GPS 19.4907258 -99.24101) 104 (resting 50 114.0) 1425619654)
+       (trackpoint (GPS 19.4907258 -99.24101) 104 (resting 50 114.0) 1425619655)))
+
+(test (create-trackpoints (take raw-data 3) my-zones)
+      (list
+       (trackpoint (GPS 19.4907258 -99.24101) 104 (resting 50 114.0) 1425619654)
+       (trackpoint (GPS 19.4907258 -99.24101) 104 (resting 50 114.0) 1425619655)
+       (trackpoint (GPS 19.4907258 -99.24101) 108 (resting 50 114.0) 1425619658)))
+
+(test (create-trackpoints (take raw-data 4) my-zones)
+      (list
+       (trackpoint (GPS 19.4907258 -99.24101) 104 (resting 50 114.0) 1425619654)
+       (trackpoint (GPS 19.4907258 -99.24101) 104 (resting 50 114.0) 1425619655)
+       (trackpoint (GPS 19.4907258 -99.24101) 108 (resting 50 114.0) 1425619658)
+       (trackpoint (GPS 19.4907107 -99.2410833) 106 (resting 50 114.0) 1425619662)))
 
 ;Test average-hr
 (test (average-hr empty) 0)
