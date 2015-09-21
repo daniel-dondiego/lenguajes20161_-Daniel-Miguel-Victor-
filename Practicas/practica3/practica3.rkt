@@ -71,15 +71,16 @@
         (create-trackpoints (cdr lst) zones) )]))
 
 ;5.Dada una lista trackpoints devuelve la distancia total
-(define (total-distance listtk)
+(define (total-distance tk)
   (cond
-    [(or (empty? listtk) (empty? (cdr listtk)))0]    
-    [else
-     (define aux1 (type-case Frame (car listtk)
-       [trackpoint (loc hr zone unix-time) loc]))
-    (define aux2 (type-case Frame (car(cdr listtk))
-       [trackpoint (loc hr zone unix-time) loc]))
-     (+ (haversine aux1 aux2) (total-distance (cdr listtk)))]))
+    [(not (list? tk)) error "No es una lista el primer elemento"]
+    [(empty? tk) 0]
+    [else (aux-total (car tk) (cdr tk))]))
+
+(define (aux-total aux-gps gps-l)
+    (cond
+      [(empty? gps-l) 0]
+      [else (+ (haversine (trackpoint-loc aux-gps) (trackpoint-loc (car gps-l))) (aux-total (car gps-l) (cdr gps-l)))]))
 
 ;6.average-hr
 ;Con una lista de trackpoints regresa el promedio del ritmo cardiaco.
@@ -103,7 +104,8 @@
 (define trackpoints (create-trackpoints raw-data my-zones))
 (define trackpoints1 (create-trackpoints (take raw-data 50) my-zones))
 (define trackpoints2 (create-trackpoints (take raw-data 400) my-zones))
-
+(define trackpoints3 (create-trackpoints (take raw-data 50) my-zones))
+(define trackpoints4 (create-trackpoints (take raw-data 10) my-zones))
 ; Funcion haversine que devuelve la distancia entre dos coordenadas
 ; Auxiliar para total-distance
 (define (haversine x y )
@@ -131,14 +133,16 @@
        [(> num (trackpoint-hr (car lst))) (auxMax-hr (cdr lst) num)] ;;si el máximo es mayor a el ritmo cardiaco de la lista continuamos con el siguiente
        [else (auxMax-hr (cdr lst) (trackpoint-hr (car lst)))])])) ;; de lo contrario recursamos ahora con el nuevo máximo
 
-;8.Victor
-(define (collapse-trackpoints trackpoints e)
+;8.collapse-trackpoints
+;Dada una lista de trackpoitns y un epsilon se agrupan los deltas consecutivos.
+(define (collapse-trackpoints lsttk e)
   (cond
-    [(empty? trackpoints) '()]
-    [(empty? (cdr trackpoints)) (list (car trackpoints))]
-    [else (empty? trackpoints)]))
+    [(empty? lsttk) '()]
+    [(empty? (cdr lsttk)) (list (car lsttk))]
+    [else         
+     (append (if (and (= (trackpoint-hr (car lsttk)) (trackpoint-hr (cadr lsttk))) (< (haversine (trackpoint-loc (car lsttk)) (trackpoint-loc (cadr lsttk))) e)) '() (list (car lsttk))) (collapse-trackpoints (cdr lsttk) e))]))
 
-
+(define sample-four (create-trackpoints (take raw-data 4) my-zones))
 ;Sección 2
 
 ;9.ninBT
@@ -157,9 +161,8 @@
     [else (+ (nlBT (BNode-l tree)) (nlBT(BNode-r tree)) )])) ;; recursa sobre cada sub arbol y suma el resultado de estos
 
 ;11.Determina el número de nodos que tiene el árbol sin hojas vacias
-;Victor
-(define (nnBT h)
-  (empty? h))
+(define (nnBT tree)
+  (+ (nlBT tree) (ninBT tree)))
 
 ;12.mapBT
 ;Dado una función de aridad 1 y un árbol de tipo BTree, aplicar la función sobre todos los valores de los nodos del árbol.
@@ -177,6 +180,10 @@
     [else (append (list (BNode-e tree)) (preorderBT (BNode-l tree)) (preorderBT (BNode-r tree)))]))
 
 ;2.inorderBT
+(define (inorderBT tree)
+  (cond
+    [(EmptyBT? tree) '()]
+    [else (append (inorderBT (BNode-l tree)) (list (BNode-e tree)) (inorderBT (BNode-r tree)))]))
 
 ;3.posorderBT
 (define (posorderBT tree)
@@ -235,7 +242,6 @@
        (maximum 140.0 150.0)))
 
 ;Tests para get-zone
-(test (get-zone 'resting my-zones)(resting 50.0 114.0))
 (test (get-zone 'warm-up my-zones)(warm-up 115.0 127.0))
 (test (get-zone 'fat-burning my-zones)(fat-burning 128.0 140.0))
 (test (get-zone 'aerobic my-zones)(aerobic 141.0 153.0))
@@ -275,12 +281,27 @@
        (trackpoint (GPS 19.4907258 -99.24101) 108 (resting 50 114.0) 1425619658)
        (trackpoint (GPS 19.4907107 -99.2410833) 106 (resting 50 114.0) 1425619662)))
 
+;Test total-distance
+(test (total-distance '()) 0)
+(test (total-distance (create-trackpoints (take raw-data 1) my-zones)) 0)
+(test (total-distance trackpoints) 5.05510837344589)
+(test (total-distance (create-trackpoints (take raw-data 100) my-zones)) 0.9509291243812747)
+(test (total-distance trackpoints3) 0.46100326160491)
+
 ;Test average-hr
 (test (average-hr empty) 0)
 (test (average-hr sample) 134)
 (test (average-hr trackpoints) 150)
 (test (average-hr trackpoints1) 128)
 (test (average-hr trackpoints2) 147)
+
+;Test collapse-trackpoints
+(test (collapse-trackpoints '() 22020022) '())
+(test (collapse-trackpoints sample-four 0.01)
+      (list
+       (trackpoint (GPS 19.4907258 -99.24101) 104 (resting 50 114.0) 1425619655)
+       (trackpoint (GPS 19.4907258 -99.24101) 108 (resting 50 114.0) 1425619658)
+       (trackpoint (GPS 19.4907107 -99.2410833) 106 (resting 50 114.0) 1425619662)))
 
 ;Test para ninBT
 (test (ninBT (EmptyBT)) 0)
@@ -289,12 +310,20 @@
 (test (ninBT arb1) 0)
 (test (ninBT arb4) 7)
 
+
 ;;tests para nlBT 
 (test (nlBT arb1) 1)
 (test (nlBT arb2) 2)
 (test (nlBT arb3) 4)
 (test (nlBT arb4) 8)
 (test (nlBT (bnn arb4 5 arb4)) 16)
+
+;Test nnBT
+(test (nnBT (EmptyBT)) 0)
+(test (nnBT arbol-base) 9)
+(test (nnBT arb1) 1)
+(test (nnBT arb2) 3)
+(test (nnBT arb3) 7)
 
 ;;test para mapBT
 (test (mapBT add1 (EmptyBT)) (EmptyBT))
@@ -309,6 +338,13 @@
 (test (preorderBT maxiarb) '(10 1 2 4 5 3 6 7 9 1 2 4 5 3 6 7 9))
 (test (preorderBT arb4) '(4 3 2 1 1 2 1 1 3 2 1 1 2 1 1))
 (test (preorderBT arbol-base) '("F" "B" "A" "D" "C" "E" "G" "I" "H"))
+
+;;Test inorderBT
+(test (inorderBT (EmptyBT)) '())
+(test (inorderBT arb1) '(1))
+(test (inorderBT maxiarb) '(4 2 5 1 7 6 9 3 10 4 2 5 1 7 6 9 3))
+(test (inorderBT arb2) '(1 2 1))
+(test (inorderBT arb3) '(1 2 1 3 1 2 1))
 
 ;;Test posorderBT
 (test (posorderBT (EmptyBT)) '())
