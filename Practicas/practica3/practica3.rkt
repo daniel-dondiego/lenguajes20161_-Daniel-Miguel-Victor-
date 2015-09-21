@@ -299,12 +299,39 @@
 
 ;Test collapse-trackpoints
 (test (collapse-trackpoints '() 22020022) '())
+(test (collapse-trackpoints (create-trackpoints (take raw-data 20) my-zones) 0.01)
+      (append
+       (collapse-trackpoints (create-trackpoints (take raw-data 15) my-zones) 0.01)
+       (list
+        (trackpoint (GPS 19.4910947 -99.2420837) 128 (fat-burning 128.0 140.0) 1425619722)
+        (trackpoint (GPS 19.491214 -99.2421806) 128 (fat-burning 128.0 140.0) 1425619726)
+        (trackpoint (GPS 19.4913238 -99.2422883) 128 (fat-burning 128.0 140.0) 1425619731)
+        (trackpoint (GPS 19.4913761 -99.2423724) 130 (fat-burning 128.0 140.0) 1425619735)
+        (trackpoint (GPS 19.4914257 -99.2424697) 131 (fat-burning 128.0 140.0) 1425619740))))
 (test (collapse-trackpoints sample-four 0.01)
       (list
        (trackpoint (GPS 19.4907258 -99.24101) 104 (resting 50 114.0) 1425619655)
        (trackpoint (GPS 19.4907258 -99.24101) 108 (resting 50 114.0) 1425619658)
        (trackpoint (GPS 19.4907107 -99.2410833) 106 (resting 50 114.0) 1425619662)))
-
+(test (collapse-trackpoints (create-trackpoints (take raw-data 15) my-zones) 0.01)
+      (append
+       (collapse-trackpoints (create-trackpoints (take raw-data 11) my-zones) 0.01)
+       (list
+        (trackpoint (GPS 19.4907662 -99.2417367) 122 (warm-up 115.0 127.0) 1425619702)
+        (trackpoint (GPS 19.4908105 -99.2418386) 123 (warm-up 115.0 127.0) 1425619709)
+        (trackpoint (GPS 19.4908799 -99.2419175) 123 (warm-up 115.0 127.0) 1425619713)
+        (trackpoint (GPS 19.491003 -99.2419904) 127 (warm-up 115.0 127.0) 1425619718))))
+(test (collapse-trackpoints (create-trackpoints (take raw-data 11) my-zones) 0.5)
+      (list
+       (trackpoint (GPS 19.4907258 -99.24101) 104 (resting 50 114.0) 1425619655)
+       (trackpoint (GPS 19.4907258 -99.24101) 108 (resting 50 114.0) 1425619658)
+       (trackpoint (GPS 19.4907107 -99.2410833) 106 (resting 50 114.0) 1425619662)
+       (trackpoint (GPS 19.4907086 -99.2411981) 111 (resting 50 114.0) 1425619671)
+       (trackpoint (GPS 19.4907059 -99.2412562) 112 (resting 50 114.0) 1425619675)
+       (trackpoint (GPS 19.4906902 -99.2413796) 115 (warm-up 115.0 127.0) 1425619681)
+       (trackpoint (GPS 19.4906865 -99.241445) 120 (warm-up 115.0 127.0) 1425619685)
+       (trackpoint (GPS 19.4906861 -99.2415517) 119 (warm-up 115.0 127.0) 1425619690)
+       (trackpoint (GPS 19.4906905 -99.2416019) 120 (warm-up 115.0 127.0) 1425619693)))
 ;Test average-hr
 (test (max-hr empty) 0)
 (test (max-hr sample) 147)
