@@ -48,6 +48,15 @@ env1 = ((x 5))
 env2 = ((y 6) (x 5))
 \end{verbatim}
 
+\begin{tikzpicture}
+\stacktop{}
+\cell{(+ 5 {(+ 5 6)})}
+\separator
+\cell{y 6}
+\separator
+\cell{x 5}
+\end{tikzpicture}\\\\
+
 Cuando realizamos la busqueda en el stack para la llamada de la funcion: 
 \begin{verbatim}
                            (+ x (+ x y))
