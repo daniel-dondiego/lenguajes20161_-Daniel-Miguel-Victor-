@@ -210,6 +210,74 @@ Dada la siguiente expresión de FWAE con with multi-parametrico:
 \item Realiza la corrida de esta expresión, es decir escribe explícitamente cada una de las llamadas tanto para subst y interp, escribiendo además los resultados parciales en sintaxis concreta.
 \end{itemize}
 
+\begin{verbatim}
+Primero hay que aplicar el Parser
+
+{parse {with {{x 5} {adder {fun {x} {fun {y} {+ x y}}}} {z 3}}
+    {with {{y 10} {add5 {adder x}}}
+          {add5 {with {{x {+ 10 z}} {y {add5 0}}}
+                  {+ {+ y x} z}}}}}}
+                  
+{with {{parse {x 5} {parse {adder {fun {x} {fun {y} {+ x y}}}}} {parse {z 3}}
+    {parse {with {{y 10} {add5 {adder x}}}
+          {add5 {with {{x {+ 10 z}} {y {add5 0}}}
+                  {+ {+ y x} z}}}}}}}
+                  
+{with {{(id x) (num 5)} {adder {parse {fun {x} {fun {y} {+ x y}}}}} {parse {z 3}}
+    {with {parse {y 10} parse {add5 {adder x}}}
+          {parse {add5 {with {{x {+ 10 z}} {y {add5 0}}}
+                  {+ {+ y x} z}}}}}}}
+                  
+{with {{(id x) (num 5)} {adder {fun {parse {x}} {fun {parse{y}} parse{+ x y}}}}} {(id z) (num 3)}
+    {with {{(id y) (num 10)} {add5 parse{adder x}}}
+          {add5 {with parse{{x {+ 10 z}} {y {add5 0}}}
+                  parse{+ {+ y x} z}}}}}
+
+{with {{(id x) (num 5)} {adder {fun {(id x)} {fun {(id y)} {add (id x) (id y)}}}}} {(id z) (num 3)}
+    {with {{(id y) (num 10)} {add5 {adder (id x)}}}
+          {add5 {with {parse{x} parse{+ 10 z}} parse{y {add5 0}}}
+                  {add parse{+ y x} parse{z}}}}}
+                  
+{with {{(id x) (num 5)} {adder {fun {(id x)} {fun {(id y)} {add (id x) (id y)}}}}} {(id z) (num 3)}
+    {with {{(id y) (num 10)} {add5 {adder (id x)}}}
+          {add5 {with {(id x) {add (num 10) (id z)}} {(id y) {add5 parse{0}}}}
+                  {add {add (id y) (id x)} {(id z)}}}}}
+                  
+{with {{(id x) (num 5)} {adder {fun {(id x)} {fun {(id y)} {add (id x) (id y)}}}}} {(id z) (num 3)}
+    {with {{(id y) (num 10)} {add5 {adder (id x)}}}
+          {add5 {with {(id x) {add (num 10) (id z)}} {(id y) {add5 (id 0)}}}
+                  {add {add (id y) (id x)} {(id z)}}}}}
+
+
+Aplicamos interp y subst
+
+{interp {with {{(id x) (num 5)} {adder {fun {(id x)} {fun {(id y)} {add (id x) (id y)}}}} {(id z) (num 3)}}
+    {with {{(id y) (num 10)} {add5 {adder (id x)}}}
+         {add5 {with {{(id x) {add (num 10) (id z)}} {(id y) {add5 (num 0)}}}
+              {add {add (id y) (id x)} (id z)}}}}}}
+              
+{interp {subst {with {{(id x) (num 5)} {adder {fun {(id x)} {fun {(id y)} {add (id x) (id y)}}}} {(id z) (num 3)}}
+    {with {{(id y) (num 10)} {add5 {adder (id x)}}}
+         {add5 {with {{(id x) {add (num 10) (id z)}} {(id y) {add5 (num 0)}}}
+              {add {add (id y) (id x)} (id z)}}}}}}}
+              
+{interp {with {{(id x) (num 5)} {adder {subst {fun {(id x)} {fun {(id y)} {add (id x) (id y)} (id x) (num 5)}}} {(id z) {subst (num 3) (id x) (num 5)}}
+    {subst {with {{(id y) (num 10)} {add5 {adder (id x)}}}
+         {add5 {with {{(id x) {add (num 10) (id z)}} {(id y) {add5 (num 0)}}}
+              {add {add (id y) (id x)} (id z)}}}}}}}}}      
+
+{interp {with {{(id x) (num 5)} {adder {fun {(id x)} {fun {(id y)} {add (num 5) (id y)}}} {(id z) (num 3)}
+    {subst {with {{(id y) (num 10)} {add5 {adder (id x)}}}
+         {add5 {with {{(id x) {add (num 10) (id z)}} {(id y) {add5 (num 0)}}}
+              {add {add (id y) (id x)} (id z)}}}}}}}}}   
+
+{interp {with {{(id x) (num 5)} {adder {fun {(id x)} {fun {(id y)} {add (num 5) (id y)}}} {(id z) (num 3)}
+    {with {{(id y) {subst (num 10) ((id x) (num 5))}} {add5 {adder {subst (id x) ((id x) (num 5))}}}
+         {subst {add5 {with {{(id x) {add (num 10) (id z)}} {(id y) {add5 (num 0)}}}
+              {add {add (id y) (id x)} (id z)}}}}}}}}}
+            
+
+\end{verbatim}
 
 \end{document}
 
