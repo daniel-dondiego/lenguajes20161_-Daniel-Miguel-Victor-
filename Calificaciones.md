@@ -15,3 +15,9 @@ Su implementación de setvalueA es incompleta debían lanzar un error cuando el 
 Les falto implementar las funciones closest-building y in-figure?
 
 **Calificación: 9**
+
+### Practica 3
+
+Muy bien, sigan así.
+
+**Calificación: 10**
