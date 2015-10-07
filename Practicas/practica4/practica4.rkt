@@ -4,22 +4,24 @@
 
 (print-only-errors true) 
 
-;;Dada una expresión en FAES la devuelve en FAE
+;1.desugar:Dada una expresión en FAES la devuelve en FAE
 (define (desugar expr)
   (type-case FAES expr
     [numS (n) (num n)]
+    [withS (bindings b) (app (fun (map (lambda (x)(bind-name x)) bindings)(desugar b))(map (lambda (bind)(desugar (bind-val bind))) bindings))]
+    [with*S (bindings b) (app (fun (map (lambda (x) (bind-name x)) bindings) (desugar b))(map (lambda (x) (desugar (bind-val x))) bindings))]
     [idS (e) (id e)]
     [funS (params b) (fun params (desugar b))]
     [appS (f lst) (app (desugar f) (map desugar lst))]
-    [binopS (f l r) (binop f (desugar l) (desugar r))]
-    [withS (bindings b) (app (fun (map (lambda (x)(bind-name x)) bindings)(desugar b))(map (lambda (bind)(desugar (bind-val bind))) bindings))]
-    [with*S (bindings b) (app (fun (map (lambda (x) (bind-name x)) bindings) (desugar b))(map (lambda (x) (desugar (bind-val x))) bindings))]))
+    [binopS (f l r) (binop f (desugar l) (desugar r))]))
+
+;2.multi-param:Adecua el interp para que las funciones
+;acepten una lista de parámetros y que las aplicaciones
+;sean de múltiples argumentos
 
 
-(test (desugar (parse '{+ 3 4})) (binop + (num 3) (num 4)))
-(test (desugar (parse '{+ {- 3 4} 7})) (binop + (binop - (num 3) (num 4)) (num 7)))
-(test (desugar (parse '{with {{x {+ 5 5}}} x})) (app (fun '(x) (id 'x)) (list (binop + (num 5) (num 5))) ))
 
+      
 (define (cparse sexp)
   (desugar (parse sexp)))
 
@@ -29,6 +31,13 @@
 
 (define (rinterp expr)
   (interp expr (mtSub)))
+;----------------------------------------------------TEST----------------------------------------------------
+;desugar
+(test (desugar (parse '{+ 3 4})) (binop + (num 3) (num 4)))
+(test (desugar (parse '{+ {- 3 4} 7})) (binop + (binop - (num 3) (num 4)) (num 7)))
+(test (desugar (parse '{with {{x {+ 5 5}}} x})) (app (fun '(x) (id 'x)) (list (binop + (num 5) (num 5))) ))
+(test (desugar (numS 0)) (num 0))
+(test (desugar (idS 'z)) (id 'z))
 
 ;;(test (rinterp (cparse '3)) (numV 3))
 ;(test (rinterp (cparse '{+ 3 4})) (numV 7))
