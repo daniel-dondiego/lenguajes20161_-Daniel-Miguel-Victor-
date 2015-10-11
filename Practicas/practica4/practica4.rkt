@@ -22,7 +22,7 @@
 ;;lookup para interp
 (define (lookup name env)
   (cond
-    [(mtSub? env)]
+    [(mtSub? env)(error 'lookup "x no esta en el ambiente")]
     [(aSub? env) (if (equal? (aSub-name env) name) (aSub-value env) (lookup name (aSub-env env)))]))
 
 ;4.interp:
@@ -30,11 +30,11 @@
 (define (interp expr env)
  (type-case FAE expr
    [num (n) (numV n)]
-   [binop (f l r) (numV (f (numV-n (interp l env)) (numV-n (interp r env))))]
    [id (name) (lookup name env)]
    [fun (params body) (closureV params body env)]
-   [app (f args) (local ([define v (interp f env)])
-                   (map (lambda (x) (interp x env)) args))]))
+   [app (body args) (local ([define v (interp body env)])
+                   (map (lambda (x) (interp x env)) args))]
+   [binop (f l r) (numV (f (numV-n (interp l env)) (numV-n (interp r env))))]))
 
 (define (rinterp expr)
   (interp expr (mtSub)))
