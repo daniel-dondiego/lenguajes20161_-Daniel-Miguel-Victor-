@@ -10,10 +10,23 @@
 En teoría y laboratorio hemos visto el lenguaje FAE, que es un lenguaje
 con expresiones aritméticas, funciones y aplicaciones de funciones.
 ¿Es FAE un lenguaje Turing-Completo?. Debes proveer una respuesta breve e inambigua, seguida de una justificación más extensa de tu respuesta.
-Hint: Investiguen sobre el combinador Y
+Hint: Investiguen sobre el combinador Y\\\\
 \textbf{Respuesta: }
-Si lo es, ya que ésta gramática cuenta con estructuras de control y recursión.
-Estructuras de control: es sencillo ver que la gramática las contiene ya que ...
+
+FAE cumple con que tiene la condicinal "if", tambien tiene expresiones aritmeticas, funciones, aplicaciones de funciones y que podemos tener recursion general en nuestras funciones en funcion de un combinador "Y". Con esto podemos decir que es turing completo.
+
+Para nuestra condicional "if" podemos utilizar dos casos:\\
+TRUE: regresaremos esto en caso de que nuestro predicao regrese verdadero, entonces ejecutaremos lo que corresponda a este caso.\\
+FALSE: que regresara si no se cumplio el predicado anterior y y entonces ejecutaremos lo correspondiente a este caso, que podemos definirlo o no.\\\\
+
+Para hacer recursion en nuestra aplicacion de funcion utilizamos el combianador Y, que hasta que no se cumpla el caso base, se aplicara.
+
+en genera el combinador "Y" funciona asi:
+
+(Y f) = f(Y f) = f(f(Y f)) = ...
+
+de forma que al usar nuestra condicional "if" junto con el combinador "Y" podemos definar recursion general.
+
 
 
 \section*{Problema II}
@@ -26,8 +39,14 @@ que gustes, pero debes mantener el programa relativamente corto:
 de unas cuantas docenas de lineas).
 \\
 
-\textbf{Respuesta: }
-Java es glotón
+\textbf{Respuesta: }\\
+Java es Gloton, pues al hacer un programa con recursión que requiea muchas llamadas llenara el stack de memoria pues si fuera perezoso pues no terminaria su stack en nuestro programa.\\
+
+Primero tratamos de simular una evaluacon perezosa donde java lo maneja como short-circuit evaluation (evaluacion de cortocircuito) que si tenemos en una operacion booleana en este caso "\&\&" (AND) para evitar caer en un error de memoria para hacer falsa nuestra expresion.\\
+En la segunda parte corremos la funcion sin evaluacion de cortocircuito y se termina el stack de memoria por ser evaluacion glotona.\\
+
+El archivo se adjunta como ProblemaII.java
+
 
 
 \section*{Problema III}
