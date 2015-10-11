@@ -10,10 +10,23 @@
 En teoría y laboratorio hemos visto el lenguaje FAE, que es un lenguaje
 con expresiones aritméticas, funciones y aplicaciones de funciones.
 ¿Es FAE un lenguaje Turing-Completo?. Debes proveer una respuesta breve e inambigua, seguida de una justificación más extensa de tu respuesta.
-Hint: Investiguen sobre el combinador Y
+Hint: Investiguen sobre el combinador Y\\\\
 \textbf{Respuesta: }
-Si lo es, ya que ésta gramática cuenta con estructuras de control y recursión.
-Estructuras de control: es sencillo ver que la gramática las contiene ya que ...
+
+FAE cumple con que tiene la condicinal "if", tambien tiene expresiones aritmeticas, funciones, aplicaciones de funciones y que podemos tener recursion general en nuestras funciones en funcion de un combinador "Y". Con esto podemos decir que es turing completo.
+
+Para nuestra condicional "if" podemos utilizar dos casos:\\
+TRUE: regresaremos esto en caso de que nuestro predicao regrese verdadero, entonces ejecutaremos lo que corresponda a este caso.\\
+FALSE: que regresara si no se cumplio el predicado anterior y y entonces ejecutaremos lo correspondiente a este caso, que podemos definirlo o no.\\\\
+
+Para hacer recursion en nuestra aplicacion de funcion utilizamos el combianador Y, que hasta que no se cumpla el caso base, se aplicara.
+
+en genera el combinador "Y" funciona asi:
+
+(Y f) = f(Y f) = f(f(Y f)) = ...
+
+de forma que al usar nuestra condicional "if" junto con el combinador "Y" podemos definar recursion general.
+
 
 
 \section*{Problema II}
