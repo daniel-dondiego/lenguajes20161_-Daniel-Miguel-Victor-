@@ -39,8 +39,14 @@ que gustes, pero debes mantener el programa relativamente corto:
 de unas cuantas docenas de lineas).
 \\
 
-\textbf{Respuesta: }
-Java es glotón
+\textbf{Respuesta: }\\
+Java es Gloton, pues al hacer un programa con recursión que requiea muchas llamadas llenara el stack de memoria pues si fuera perezoso pues no terminaria su stack en nuestro programa.\\
+
+Primero tratamos de simular una evaluacon perezosa donde java lo maneja como short-circuit evaluation (evaluacion de cortocircuito) que si tenemos en una operacion booleana en este caso "\&\&" (AND) para evitar caer en un error de memoria para hacer falsa nuestra expresion.\\
+En la segunda parte corremos la funcion sin evaluacion de cortocircuito y se termina el stack de memoria por ser evaluacion glotona.\\
+
+El archivo se adjunta como ProblemaII.java
+
 
 
 \section*{Problema III}
