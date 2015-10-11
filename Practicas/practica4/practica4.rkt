@@ -9,22 +9,17 @@
   (type-case FAES expr
     [numS (n) (num n)]
     [withS (bindings b) (app (fun (map (lambda (x)(bind-name x)) bindings)(desugar b))(map (lambda (bind)(desugar (bind-val bind))) bindings))]
+    ;3.with*: Adecua desugar para obtener para recibir expresiones with*
     [with*S (bindings b) (app (fun (map (lambda (x) (bind-name x)) bindings) (desugar b))(map (lambda (x) (desugar (bind-val x))) bindings))]
     [idS (e) (id e)]
     [funS (params b) (fun params (desugar b))]
     [appS (f lst) (app (desugar f) (map desugar lst))]
     [binopS (f l r) (binop f (desugar l) (desugar r))]))
 
-;2.multi-param:Adecua el interp para que las funciones
-;acepten una lista de parámetros y que las aplicaciones
-;sean de múltiples argumentos
-
-
-
-      
 (define (cparse sexp)
   (desugar (parse sexp)))
 
+;4.interp:
 (define (interp expr env)
   ;; Implementar interp
   (error 'interp "Not implemented"))

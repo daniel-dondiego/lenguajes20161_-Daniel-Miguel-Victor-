@@ -69,8 +69,19 @@ de por que no puede existir, luego considera el mismo lenguaje con cons, first
 y rest añadidos.
 \\
 
-\textbf{Respuesta: }
+\textbf{Respuesta: } 
+Se anexan dos archivos:
+En ejercicio3-original.rkt se usa el intérprete original,en ejercicio3-doug.rkt se utiliza el intérprete de doug.
 
+Ambos utilizan la misma expresión pero el intérprete original devuelve :
+\begin{verbatim}
+ > (exprV (num 10) (mtSub))
+ \end{verbatim}
+y el intérprete de doug devuelve:
+\begin{verbatim}
+ > (numV 10)
+ \end{verbatim} 
+Cuando los intérpretes llegan a lookup, el original devuelve el valor que le llega, en el de doug con stric t lo aplica hasta que no encuentra una exprV y ahí nos devuelve el resultado ya mencionado.
 
 
 \section*{Problema IV}
