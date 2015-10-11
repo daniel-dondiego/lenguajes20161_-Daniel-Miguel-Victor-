@@ -19,22 +19,42 @@
 (define (cparse sexp)
   (desugar (parse sexp)))
 
-;;lookup para interp
+;;lookup para interp (del shiram)
 (define (lookup name env)
-  (cond
-    [(mtSub? env)(error 'lookup "x no esta en el ambiente")]
-    [(aSub? env) (if (equal? (aSub-name env) name) (aSub-value env) (lookup name (aSub-env env)))]))
+  (type-case Env env
+    [mtSub () (error  'lookup "no binding for identifier" )]
+    [aSub (bound-name bound-value rest-env)
+           (if (symbol=? bound-name name)
+               bound-value
+               (lookup name rest-env))]))
 
 ;4.interp:
-;; evalua una expresion dada en la gramática FAE
+;; evalua una expresion dada el ambiente
 (define (interp expr env)
- (type-case FAE expr
-   [num (n) (numV n)]
-   [id (name) (lookup name env)]
-   [fun (params body) (closureV params body env)]
-   [app (body args) (local ([define v (interp body env)])
-                   (map (lambda (x) (interp x env)) args))]
-   [binop (f l r) (numV (f (numV-n (interp l env)) (numV-n (interp r env))))]))
+  (type-case FAE expr
+    [num (n) (numV n)]
+    [id (name) (lookup name env)]
+    [binop (f l r) (numV (f (numV-n (interp l env)) (numV-n (interp r env))))]
+    [fun (params body) (closureV params body env)]
+    [app (f args) (if (generalLookup args env)
+                      (local ([define a (interp f env)]) (appF f (closureV-param a) args env))
+                      (error 'interp "Imposible evaluar"))]))
+
+;verifica si todos los argumentos están en el ambiente
+(define (generalLookup args env)
+  (cond 
+    [empty? args #t]
+    [else (and (number? (lookup (car args) env)) (generalLookup (cdr args) env))]))
+
+;aux para evaluar las funciones
+(define (appF f fLst args env)
+  (cond 
+  	[(empty? (cdr fLst)) (interp (closureV-body (interp f env))
+                			(aSub (car fLst)
+                      		(interp (car args) env)
+                      		(closureV-env (interp f env))))]
+    [else (appF f (cdr fLst) (cdr args) (aSub (car fLst) (interp (car args) env) env))]))
+
 
 (define (rinterp expr)
   (interp expr (mtSub)))
