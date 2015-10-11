@@ -8,13 +8,13 @@
 (define (desugar expr)
   (type-case FAES expr
     [numS (n) (num n)]
-    [withS (bindings b) (app (fun (map (lambda (x)(bind-name x)) bindings)(desugar b))(map (lambda (bind)(desugar (bind-val bind))) bindings))]
-    ;3.with*: Adecua desugar para obtener para recibir expresiones with*
-    [with*S (bindings b) (app (fun (map (lambda (x) (bind-name x)) bindings) (desugar b))(map (lambda (x) (desugar (bind-val x))) bindings))]
+    [withS (bindings b) (app (fun (map (lambda (x)(bind-name x)) bindings)(desugar b))(map (lambda (x)(desugar (bind-val x))) bindings))]    
     [idS (e) (id e)]
     [funS (params b) (fun params (desugar b))]
     [appS (f lst) (app (desugar f) (map desugar lst))]
-    [binopS (f l r) (binop f (desugar l) (desugar r))]))
+    [binopS (f l r) (binop f (desugar l) (desugar r))]
+    ;3.with*: Adecua desugar para obtener para recibir expresiones with*
+    [with*S (bindings b)(if (empty? bindings)(desugar b)(desugar (withS (list (car bindings)) (with*S (cdr bindings) b))))]))
 
 (define (cparse sexp)
   (desugar (parse sexp)))
