@@ -21,3 +21,20 @@ Les falto implementar las funciones closest-building y in-figure?
 Muy bien, sigan así.
 
 **Calificación: 10**
+
+## Tareas
+
+### Tarea 2
+
+Problema 1: FAE no tiene explicitamente condicionales ni el concepto de true o false estos se pueden definir por medio de funciones lo cual debían de indicar.
+
+Problema 2: Java es glotón, los operadores lógicos tienen una semantica short-circuit sin importar si el lenguaje es perezoso o glotón así que no tu programa no ayuda a indicar que Java es glotón. Aparte su ejemplo es ortogonal
+a que el lenguaje sea perezoso o glotón, aun en Haskell al tratar de imprimir
+se tendría que hacer la evaluación de la función fibonacci.
+
+Problema 3: Muy bien, solo quisiera que pensaran en el caso de que lugar de regresar un numero hubiera sido el identificador de una lista infinita.
+
+Problema 4: Muy bien, esperaba el programa con la sintaxis de racket o de FAE
+pero esta bien.
+
+**Calificación: 9**
