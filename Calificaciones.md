@@ -22,6 +22,12 @@ Muy bien, sigan así.
 
 **Calificación: 10**
 
+### Practica 4
+
+Su implementación de with* es erronea, ademas se tiene errores en su interprete en la aplicación de funciones.
+
+**Calificación: 8**
+
 ## Tareas
 
 ### Tarea 1
