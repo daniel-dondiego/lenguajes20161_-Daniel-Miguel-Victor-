@@ -24,6 +24,14 @@ Muy bien, sigan así.
 
 ## Tareas
 
+### Tarea 1
+Problema I: Es O(1) cuando no hay colisiones, cuidado con eso.
+Problema II: Tu ejemplo es correcto pero tus valores no 
+son los que se regresan segun el alcance.
+Problem III: Te falto sustituir add5 por su coordenada lexica.
+
+**Calificación: 9**
+
 ### Tarea 2
 
 Problema 1: FAE no tiene explicitamente condicionales ni el concepto de true o false estos se pueden definir por medio de funciones lo cual debían de indicar.
