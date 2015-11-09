@@ -2,6 +2,18 @@
 
 (define-type Binding
   [bind (name symbol?) (val RCFAELS?)])
+  
+(define-type MListFAELS
+  (MEmptyS)
+  (MConsS [mcar RCFAELS?] [mcdr MListFAELS?]))
+  
+(define-type MListS
+  (MEmpty)
+  (MCons [mcar RCFAEL?] [mcdr MListS?]))
+  
+(define-type MListV
+  (MEmptyV)
+  (MConsV [mcar RCFAEL-Value?] [mcdr MListV?]))
 
 (define-type RCFAELS
   [numS (n number?)]
