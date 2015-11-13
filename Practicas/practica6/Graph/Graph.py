@@ -3,11 +3,8 @@
 
 class Graph:
 	"""
-
+		Modela una gráfica.
 	"""
-	V = {}
-	E = {}
-
 	def __init__(self, v, e):
 		V = v
 		E = e
@@ -34,5 +31,11 @@ class Graph:
 		return E
 	#end edges
 
+	def has_cycles(self):
+		"""
+		Nos dice si tiene ciclos la gráfica.
+		"""
+		return false
+	#end has_cycles
 
 #end Graph
