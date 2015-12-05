@@ -8,8 +8,30 @@ class GraphReader:
 	"""
 	
 	def toGraph(self,ruta):
-		print ruta
+		if ruta.endswith('.xml'):
+			return self.__xmlToGraph(ruta)
+		if ruta.endswith('.json'):
+			return self.__jsonToGraph(ruta)
+		if ruta.endswith('.csv'):
+			return self.__csvToGraph(ruta)
+		return None
 	#end toGraph
+
+
+	def __xmlToGraph(self, ruta):
+		print 'xml'
+		return None
+	#end
+
+	def __jsonToGraph(self, ruta):
+		print 'json'
+		return None
+	#end
+
+	def __csvToGraph(self, ruta):
+		print 'csv'
+		return None
+	#end
 
 #end GraphReader
 
