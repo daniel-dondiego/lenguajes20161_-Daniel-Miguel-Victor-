@@ -5,16 +5,17 @@ class Graph:
 	"""
 		Modela una gráfica.
 	"""
-	def __init__(self, v, e):
+	def __init__(self, v, e, d):
 		V = v
 		E = e
+		D = d
 	#end init
 
 	def directed(self):
 		"""
 			Nos dice si la gráfica es dirigida o no.
 		"""
-		return false
+		return D
 	#end directed
 
 	def vertices(self):
