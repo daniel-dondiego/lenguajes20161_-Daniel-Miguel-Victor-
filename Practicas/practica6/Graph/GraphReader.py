@@ -27,10 +27,7 @@ class GraphReader:
 		xml = minidom.parse(ruta)
 		#Dirigida?
 		d = xml.getElementsByTagName('graph')
-		if d[0].attributes['direct'].value == '0':
-			dirigida = False
-		else:
-			dirigida = True	
+		dirigida = d[0].attributes['direct'].value == '0'
 		#Aristas	
 		E=[]
 		for e in xml.getElementsByTagName('edge'):
