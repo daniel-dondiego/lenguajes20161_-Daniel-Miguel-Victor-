@@ -4,24 +4,67 @@
 
 (print-only-errors true) 
 
+;1.desugar:Dada una expresión en FAES la devuelve en FAE
 (define (desugar expr)
-  ;; Implementar desugar
-  (error 'desugar "Not implemented"))
-
-
-(test (desugar (parse '{+ 3 4})) (binop + (num 3) (num 4)))
-(test (desugar (parse '{+ {- 3 4} 7})) (binop + (binop - (num 3) (num 4)) (num 7)))
-(test (desugar (parse '{with {{x {+ 5 5}}} x})) (app (fun '(x) (id 'x)) (list (binop + (num 5) (num 5))) ))
+  (type-case FAES expr
+    [numS (n) (num n)]
+    [withS (bindings b) (app (fun (map (lambda (x)(bind-name x)) bindings)(desugar b))(map (lambda (bind)(desugar (bind-val bind))) bindings))]
+    ;3.with*: Adecua desugar para obtener para recibir expresiones with*
+    [with*S (bindings b) (app (fun (map (lambda (x) (bind-name x)) bindings) (desugar b))(map (lambda (x) (desugar (bind-val x))) bindings))]
+    [idS (e) (id e)]
+    [funS (params b) (fun params (desugar b))]
+    [appS (f lst) (app (desugar f) (map desugar lst))]
+    [binopS (f l r) (binop f (desugar l) (desugar r))]))
 
 (define (cparse sexp)
   (desugar (parse sexp)))
 
+;;lookup para interp (del shiram)
+(define (lookup name env)
+  (type-case Env env
+    [mtSub () (error  'lookup "no binding for identifier" )]
+    [aSub (bound-name bound-value rest-env)
+           (if (symbol=? bound-name name)
+               bound-value
+               (lookup name rest-env))]))
+
+;4.interp:
+;; evalua una expresion dada el ambiente
 (define (interp expr env)
-  ;; Implementar interp
-  (error 'interp "Not implemented"))
+  (type-case FAE expr
+    [num (n) (numV n)]
+    [id (name) (lookup name env)]
+    [binop (f l r) (numV (f (numV-n (interp l env)) (numV-n (interp r env))))]
+    [fun (params body) (closureV params body env)]
+    [app (f args) (if (generalLookup args env)
+                      (local ([define a (interp f env)]) (appF f (closureV-param a) args env))
+                      (error 'interp "Imposible evaluar"))]))
+
+;verifica si todos los argumentos están en el ambiente
+(define (generalLookup args env)
+  (cond 
+    [empty? args #t]
+    [else (and (number? (lookup (car args) env)) (generalLookup (cdr args) env))]))
+
+;aux para evaluar las funciones
+(define (appF f fLst args env)
+  (cond 
+  	[(empty? (cdr fLst)) (interp (closureV-body (interp f env))
+                			(aSub (car fLst)
+                      		(interp (car args) env)
+                      		(closureV-env (interp f env))))]
+    [else (appF f (cdr fLst) (cdr args) (aSub (car fLst) (interp (car args) env) env))]))
+
 
 (define (rinterp expr)
   (interp expr (mtSub)))
+;----------------------------------------------------TEST----------------------------------------------------
+;desugar
+(test (desugar (parse '{+ 3 4})) (binop + (num 3) (num 4)))
+(test (desugar (parse '{+ {- 3 4} 7})) (binop + (binop - (num 3) (num 4)) (num 7)))
+(test (desugar (parse '{with {{x {+ 5 5}}} x})) (app (fun '(x) (id 'x)) (list (binop + (num 5) (num 5))) ))
+(test (desugar (numS 0)) (num 0))
+(test (desugar (idS 'z)) (id 'z))
 
 (test (rinterp (cparse '3)) (numV 3))
 (test (rinterp (cparse '{+ 3 4})) (numV 7))
@@ -40,8 +83,7 @@
 (test (rinterp (cparse '{with {{x 3}} {fun {y} {+ x y}}})) (closureV '(y) (binop + (id 'x) (id 'y)) (aSub 'x (numV 3) (mtSub))))
 (test (rinterp (cparse '{with {{x 10}} {{fun {y} {+ y x}} {+ 5 x}}})) (numV 25))
 (test (rinterp (cparse '{with {{x 1} {y 2} {z 3}} {+ {+ x y} z}})) (numV 6))
-(test (rinterp (cparse '{{fun {x y z} {+ {+ x y} z}} 1 2 3})) (numV 6))
-(test (rinterp (cparse '{with* {{x 3} {y {+ 2 x}} {z {+ x y}}} z})) (numV 8))
+(test (rinterp (cparse '{{fun {x y z} {+ {+ x y} z}} 1 2 3})) (numV 6))(test (rinterp (cparse '{with* {{x 3} {y {+ 2 x}} {z {+ x y}}} z})) (numV 8))
 (test (rinterp (cparse '{with* {{x 3} {y {+ 2 x}} {x 10} {z {+ x y}}} z})) (numV 15))
 (test/exn (rinterp (cparse '{with {{x 10} {x 20}} x})) "El id x está repetido")
 (test (rinterp (cparse '{with* {{x 10} {x 20}} x})) (numV 20))
