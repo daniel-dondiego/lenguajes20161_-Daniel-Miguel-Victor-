@@ -24,8 +24,20 @@ class GraphReader:
 	#end
 
 	def __jsonToGraph(self, ruta):
-		print 'json'
-		return None
+		try:
+            json_graph=open(arch)
+            g = json.load(json_graph)
+            vertix = []
+            edg = {}
+            for v in g['vertices']:
+                vertix.append(v)
+            for e in g['edges']:
+                edg[j[0]]= [j[1], j[2]]
+            json_graph.close()
+            return Graph(vertix, edg, (int(g['direct']) == 1))
+        except:
+            print("El archivo JSON se encuentra corrupto")
+
 	#end
 
 	def __csvToGraph(self, ruta):
