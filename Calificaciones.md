@@ -52,3 +52,19 @@ Problema 4: Muy bien, esperaba el programa con la sintaxis de racket o de FAE
 pero esta bien.
 
 **Calificación: 9**
+
+### Tarea 3
+
+Problema I: Bien.
+
+Problema II: Es incorrecta el porque da error la expresion.
+
+Problema III: Los tipos obtenidos son incorrectos.
+
+Problema IV: Muy bien.
+
+Problema V: Bien
+
+Problema VI: Faltaron los ejemplos
+
+**Calificación: 7.5**
