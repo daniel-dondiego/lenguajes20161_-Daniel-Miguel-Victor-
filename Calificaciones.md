@@ -28,6 +28,24 @@ Su implementación de with* es erronea, ademas se tiene errores en su interprete
 
 **Calificación: 8**
 
+### Practica 5
+
+El archivo tiene error desde el inicio por
+repetición de la definición de Mempty, su
+implantación de recursion con procedimientos no
+existe.
+
+**Calificación: 5**
+
+### Practica 6
+
+Su README no indica como usar su proyecto,
+no implementaron la lectura del formato CSV,
+no implementaron la detección de ciclos y
+no hicieron uso de herencia y polimorfismo.
+
+**Calificación: 4**
+
 ## Tareas
 
 ### Tarea 1
